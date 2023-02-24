@@ -227,8 +227,8 @@
 
 
     <!-- 페이지 -->
-    <nav class="marbot_100" aria-label="Page navigation example" >
-      <ul class="pagination">
+    <nav class="marbot_100" aria-label="Page navigation example"  th:style="${totalPage<=0 ? 'visibility:hidden' : 'visibility'}" >
+      <ul class="pagination" >
         <li class="page-item" th:classappend="${1 == nowPage} ? 'disabled'">
           <a class="page-link" href="#" aria-label="Previous"
              th:href="@{/boardlist(id=${comid},page=${startPage-1})}">
@@ -247,11 +247,11 @@
             th:if="${i >= nowPage-5 and i <= nowPage+4}">
           <a class="page-link" href="#"
              th:href="@{/boardlist(id=${comid},page=${i - 1},searchKeyword = ${param.searchKeyword})}"
-             th:text="${i}">1</a></li>
+             th:text="${i}" th:style="${i<=0 ? 'display:none' : 'display:block'}"></a></li>
 
         <li class="page-item" th:classappend="${endPage == nowPage} ? 'disabled'">
           <a class="page-link" href="#" aria-label="Next"  th:href="@{/boardlist(id=${comid},page=${nowPage})}">
-            <span aria-hidden="true">&gt;</span>
+            <span  aria-hidden="true">&gt;</span>
           </a>
         <li class="page-item" th:classappend="${endPage == nowPage} ? 'disabled'">
           <a class="page-link" href="#" aria-label="Next"  th:href="@{/boardlist(id=${comid},page=${endPage-1})}">
@@ -259,6 +259,7 @@
           </a>
         </li>
       </ul>
+
     </nav>
     <!-- section - end -->
 

@@ -74,6 +74,7 @@ public class CommunityServiceImpl implements CommunityService{
                 .postNo(communityMaster.getPostNo())
                 .build();
 
+
         files.transferTo(saveImg);
         communityMaster.setSumImg(file.getImgPath());
         CommunityImage savedFile = communityImageRepository.save(file);
