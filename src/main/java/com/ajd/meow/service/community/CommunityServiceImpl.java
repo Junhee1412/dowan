@@ -36,11 +36,11 @@ public class CommunityServiceImpl implements CommunityService{
     private CommunityImageRepository communityImageRepository;
 
 
-    //글 작성
+    //글 작성 230224 수정
     public void write(CommunityMaster communityMaster){
 
-        communityMaster.setCommunityId("ADP_ACT");
-        communityMaster.setPostId("ADT_ING");
+        //communityMaster.setCommunityId("ADP_ACT");
+        communityMaster.setPostId("ADT_ING"); // 이거 나중에 select창 넣으면 빼면 됨
         communityMaster.setCreatePostDate(LocalDateTime.now());
 
         communityMasterRepository.save(communityMaster);
@@ -125,7 +125,6 @@ public class CommunityServiceImpl implements CommunityService{
 
 
     public Page<CommunityMaster> communitySearchKeyword(String searchKeyword,Pageable pageable){
-
         return communityMasterRepository.findBySubjectContaining(searchKeyword, pageable);
     }
 

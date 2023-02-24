@@ -132,8 +132,16 @@
       </div>
      </div>
     <form action="/boardwritepro" method="post" enctype="multipart/form-data" >
+      
+      <!--230224 add_start-->
+      <input type="hidden" th:value="${comid}" name="communityId">
+      <!--230224 add_end-->
+
     <div id="insert_text_box">
       <div class="row w-50 mb-3">
+
+        <!--여기 포스트아이디 선택하는 select 잇어야할듯-->
+        
         <label for="formTextContent" class="col-sm-2 col-form-label">제목 *</label>
         <div class="col-sm-10">
 

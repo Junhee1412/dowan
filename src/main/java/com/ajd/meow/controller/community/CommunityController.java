@@ -38,16 +38,17 @@ public class CommunityController {
     private UserService userService;
 
 
-    @GetMapping("/boardwrite") //localhost:8080/boardwrite 작성시 이동
-    public String boardWriteForm(HttpSession session, Model model) {
+    @GetMapping("/boardwrite") //localhost:8080/boardwrite 작성시 이동 // 230224 추가
+    public String boardWriteForm(String id, HttpSession session, Model model) {
         UserMaster loginUser = (UserMaster) session.getAttribute("user");
         model.addAttribute("user", loginUser);
+        model.addAttribute("comid",id);
 
         return "community/post_insert";
     }
 
 
-    @PostMapping("/boardwritepro")
+    @PostMapping("/boardwritepro") // 230224 수정햇음
     public String boardWritePro(HttpSession session, Model model, CommunityMaster communityMaster,
                                 @RequestParam("files") List<MultipartFile> files) throws Exception {
 
@@ -63,7 +64,7 @@ public class CommunityController {
             communityService.saveFile(img, session, model, communityMaster);
         }
             model.addAttribute("message", "글 작성 완료.");
-            model.addAttribute("SearchUrl", "/boardlist");
+            model.addAttribute("SearchUrl", "/boardlist?id="+communityMaster.getCommunityId());
 //        return "redirect:/boardlist";
         return "community/community_message";
     }
@@ -114,7 +115,9 @@ public class CommunityController {
         if(searchKeyword == null ) {
             lists = communityMasterRepository.findAllByCommunityId(id, pageable);
         }else {
-            lists = communityService.communitySearchKeyword(searchKeyword,pageable); // 수정해야함.
+            //lists = communityService.communitySearchKeyword(searchKeyword,pageable); // 수정해야함.
+            lists=communityMasterRepository.findBySubjectContainingAndCommunityId(searchKeyword,id,pageable);
+            //lists=communityMasterRepository.findBySubjectAndCommunityId(id, searchKeyword, pageable);
         } // 검색 끝?
 
         int nowPage = lists.getPageable().getPageNumber() + 1;
