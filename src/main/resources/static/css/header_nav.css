@@ -1,7 +1,5 @@
 @charset "UTF-8";
 
-@import url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@300;400;500&family=Noto+Serif+KR:wght@300;400;500&display=swap');
- 
 .container,
 .container-fluid,
 .container-xxl,
@@ -16,12 +14,15 @@
   margin-left: auto;
 }
 
+
 @media (min-width: 576px) {
   .container-sm,
   .container {
     max-width: 540px;
   }
 }
+
+
 @media (min-width: 768px) {
   .container-md,
   .container-sm,
@@ -81,26 +82,14 @@
   justify-content: space-between !important;
 }
 
-.justify-content-around {
-  justify-content: space-around !important;
-}
-
-.justify-content-evenly {
-  justify-content: space-evenly !important;
-}
-
 .align-items-start {
   align-items: flex-start !important;
 }
 
-.align-items-center {
-  align-items: center !important;
-}
 
 body,
 html {
   width: 100%;
-  height: 100%;
 }
 
 /*  네브바 ~~ ~~~  */
@@ -377,4 +366,9 @@ html {
   height: 65px;
   margin-top: -10px;
   margin-bottom: -10px;
+}
+
+.dummy{
+  height:5000px;
+  background-color:black;
 }
