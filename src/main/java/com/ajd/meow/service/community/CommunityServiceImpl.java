@@ -55,8 +55,8 @@ public class CommunityServiceImpl implements CommunityService{
         if (files.isEmpty()) {
             return null;
         }
-        //프로젝트 경로
-        String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
+        //프로젝트 경로 System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files"
+        String projectPath = "/home/ec2-user/imges";
         //uuid 랜덤
         UUID uuid = UUID.randomUUID();
         //파일 랜덤이름지정
@@ -76,7 +76,7 @@ public class CommunityServiceImpl implements CommunityService{
 
 
         files.transferTo(saveImg);
-        communityMaster.setSumImg(file.getImgPath());
+        communityMaster.setSumImg(file.getImgName());
         CommunityImage savedFile = communityImageRepository.save(file);
 
         return savedFile.getImageNo();
