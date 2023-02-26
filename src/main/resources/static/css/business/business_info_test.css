@@ -1,17 +1,4 @@
 
-.sa {
-  opacity: 0;
-  transition: all 1s ease;
-}
-
-.sa-up {
-  transform: translate(0, 100px);
-}
-
-.sa.show {
-  opacity: 1;
-  transform: none;
-}
 .front_img {
   width:70%;
   z-index: 99;

@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<head th:replace="~{fragments/config :: config}"></head>
+<head th:replace="~{fragments/config :: config(~{::title})}"></head>
 
 <body id="page-top">
 <!-- header 시작 -->
