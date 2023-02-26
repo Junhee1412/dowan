@@ -178,6 +178,15 @@ public class CommunityServiceImpl implements CommunityService{
             communityImageRepository.deleteAllByPostNo(postNo);
         }
     }
+
+    // 230225 추가
+    public Page<CommunityMaster> searchBySubjectAndComid(String searchKeyword, String communityId, Pageable pageable){
+        return communityMasterRepository.findBySubjectContainingAndCommunityId(searchKeyword,communityId,pageable);
+    }
+
+    public Page<CommunityMaster> searchBySubjectAndUser(String searchKeyword, Long userNo, Pageable pageable){
+        return communityMasterRepository.findBySubjectContainingAndUserNo(searchKeyword,userNo,pageable);
+    }
 }
 
 

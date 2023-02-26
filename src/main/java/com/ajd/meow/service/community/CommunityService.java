@@ -54,4 +54,10 @@ public interface CommunityService {
 
     void deleteAllcomIMG(Long postNo);
 
+    //230225 추가 - 제목/커뮤로 검색, 제목/유저로 검색
+    Page<CommunityMaster> searchBySubjectAndComid(String searchKeyword, String communityId, Pageable pageable);
+
+    Page<CommunityMaster> searchBySubjectAndUser(String searchKeyword, Long userNo, Pageable pageable);
+
+
 }

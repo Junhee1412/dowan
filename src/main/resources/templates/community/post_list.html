@@ -149,6 +149,7 @@
       <form th:action="@{/boardlist}" method="get">
         <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
           <div class="input-group">
+            <input type="hidden" name="id" th:value="${comid}"><!--230224 여기 추가-->
             <input type="search" name="searchKeyword" placeholder="제목을 입력하세요" aria-describedby="button-addon1" class="form-control border-0 bg-light">
             <div class="input-group-append">
               <button id="button-addon1" type="submit" class="btn btn-link text-primary"><i class="fa fa-search"></i></button>

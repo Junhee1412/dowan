@@ -63,7 +63,7 @@ public class CommunityController {
             communityService.saveFile(img, session, model, communityMaster);
         }
             model.addAttribute("message", "글 작성 완료.");
-            model.addAttribute("SearchUrl", "/boardlist");
+            model.addAttribute("SearchUrl", "/boardlist?id="+communityMaster.getCommunityId());
 //        return "redirect:/boardlist";
         return "community/community_message";
     }
@@ -100,11 +100,11 @@ public class CommunityController {
 //
 //        return "community/post_list";
 //    }
-    @GetMapping("boardlist") // 내가 해보고 잇는거 230223 추가
-    public String communityList(String id, @PageableDefault(page = 0, size = 12, sort = "postNo", direction = Sort.Direction.DESC) Pageable pageable, HttpSession session, Model model, String searchKeyword){
-        if(session.getAttribute("user")==null){
-            return "redirect:/";
-        }else{
+@GetMapping("boardlist") // 내가 해보고 잇는거 230223 추가
+public String communityList(String id, @PageableDefault(page = 0, size = 12, sort = "postNo", direction = Sort.Direction.DESC) Pageable pageable, HttpSession session, Model model, String searchKeyword){
+    if(session.getAttribute("user")==null){
+        return "redirect:/";
+    }else{
         UserMaster loginUser=userService.getUserMaster((UserMaster)session.getAttribute("user"));
         model.addAttribute("user", loginUser);
 
@@ -114,21 +114,20 @@ public class CommunityController {
         if(searchKeyword == null ) {
             lists = communityMasterRepository.findAllByCommunityId(id, pageable);
         }else {
-            lists = communityService.communitySearchKeyword(searchKeyword,pageable); // 수정해야함.
+            lists=communityMasterRepository.findBySubjectContainingAndCommunityId(searchKeyword,id,pageable);
         } // 검색 끝?
 
-        int nowPage = lists.getPageable().getPageNumber()+1;
-        int startPage = Math.max(1, 1);
+        int nowPage = lists.getPageable().getPageNumber() + 1;
+        int startPage = Math.max(0, 1);
         int endPage = Math.min(nowPage + 10, lists.getTotalPages());
         int totalPage = lists.getTotalPages();
-
 
         model.addAttribute("list", lists);
         model.addAttribute("nowPage", nowPage);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
+        model.addAttribute("totalPage", totalPage);
         model.addAttribute("maxPage", 10);
-        model.addAttribute("totalPage",totalPage);
         model.addAttribute("comid", id);
 
         return "community/post_list";

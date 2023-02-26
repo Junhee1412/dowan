@@ -61,7 +61,7 @@ public class MyPageController {
     }
 
 
-    @GetMapping("myPost") // 내글 모두보기
+    @GetMapping("myPost") // 내글 모두보기 - 230225 수정 (서치쪽)
     public String myPost(HttpSession session, Model model, @PageableDefault(page = 0,size = 10, sort = "postNo", direction = Sort.Direction.DESC) Pageable pageable, String searchKeyword){
         if(session.getAttribute("user")==null){
             return "redirect:/"; // 홈으로
@@ -75,17 +75,19 @@ public class MyPageController {
             if(searchKeyword == null ) {
                 boardListFindByUserNO=  communityService.boardListByUserNO(loginUser.getUserNo(), pageable);
             }else {
-                boardListFindByUserNO= communityService.communitySearchKeyword(searchKeyword,pageable);
+                boardListFindByUserNO=communityService.searchBySubjectAndUser(searchKeyword,loginUser.getUserNo(),pageable);
             }
 
             int nowPage = boardListFindByUserNO.getPageable().getPageNumber()+1 ;
             int startPage = Math.max(0 , 1);
             int endPage = Math.min(nowPage + 10 , boardListFindByUserNO.getTotalPages());
+            int totalPage= boardListFindByUserNO.getTotalPages();
 
             model.addAttribute("nowPage", nowPage);
             model.addAttribute("startPage", startPage);
             model.addAttribute("endPage", endPage);
             model.addAttribute("maxPage",10);
+            model.addAttribute("totalPage", totalPage);
 
             model.addAttribute("userNickName",loginUser.getNickName());
             model.addAttribute("postList",boardListFindByUserNO);
