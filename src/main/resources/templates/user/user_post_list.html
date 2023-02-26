@@ -189,9 +189,11 @@
         <hr class="border border-white">
       </div>
 
+
 <!-- 검색 하기 -->
       <div  style="margin: 0 auto; width: 25%; ">
-        <form th:action="@{/myPost}" method="get">
+        <!-- 230226 일반유저가 검색할 경우 -->
+        <form th:if="${userType}=='MEMBER'" th:action="@{/myPost}" method="get">
           <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
             <div class="input-group">
               <input type="search" name="searchKeyword" placeholder="제목을 입력하세요" aria-describedby="button-addon1" class="form-control border-0 bg-light">
@@ -201,11 +203,36 @@
             </div>
           </div>
         </form>
+        <!-- 230226 관리자가 전체글에서 검색 -->
+        <form th:if="${userType}=='ADMIN' and ${userNickName}==null" th:action="@{/adminPostManage}" method="get">
+          <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+            <div class="input-group">
+              <input type="search" name="searchKeyword" placeholder="제목을 입력하세요" aria-describedby="button-addon1" class="form-control border-0 bg-light">
+              <div class="input-group-append">
+                <button id="button-addon1" type="submit" class="btn btn-link text-primary"><i class="fa fa-search"></i></button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <!-- 230226 관리자가 유저 상세보기에서 검색 -->
+        <form th:if="${userType}=='ADMIN' and ${userNickName}!=null" th:action="@{/adminUserPost}" method="get">
+          <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+            <div class="input-group">
+              <input type="hidden" name="userNo" th:value="${userNo}">
+              <input type="search" name="searchKeyword" placeholder="제목을 입력하세요" aria-describedby="button-addon1" class="form-control border-0 bg-light">
+              <div class="input-group-append">
+                <button id="button-addon1" type="submit" class="btn btn-link text-primary"><i class="fa fa-search"></i></button>
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
-  
+
       <hr class="border border-white">
       <!-- 페이지 -->
-      <nav  class="marbot_100" aria-label="Page navigation example" >
+      <!--230225 아래줄에 th:style="${totalPage<=0 ? 'visibility:hidden' : 'visibility'}" 추가-->
+      <!-- 230226 , searchKeyword = ${param.searchKeyword} 추가 -->
+      <nav  class="marbot_100" aria-label="Page navigation example" th:style="${totalPage<=0 ? 'visibility:hidden' : 'visibility'}">
         <ul class="pagination">
           <li class="page-item" th:classappend="${1 == nowPage} ? 'disabled'">
             <a class="page-link" th:if="${userType}=='ADMIN' and ${userNickName}==null" href="#" aria-label="Previous" th:href="@{/adminPostManage(page=${startPage-1})}"><span aria-hidden="true">&laquo;</span></a>
@@ -219,8 +246,8 @@
           </li>
           <li class="page-item" th:classappend="${i == nowPage} ? 'disabled'" th:each="i : ${#numbers.sequence(startPage, endPage)}" th:if="${i >= nowPage-5 and i <= nowPage+4}">
             <a class="page-link" th:if="${userType}=='ADMIN' and ${userNickName}==null" href="#"  th:href="@{/adminPostManage(page=${i - 1}, searchKeyword = ${param.searchKeyword})}" th:text="${i}">1</a>
-            <a class="page-link" th:if="${userType}=='ADMIN' and ${userNickName}!=null" href="#"  th:href="@{/adminUserPost(userNo=${userNo},page=${i - 1})}" th:text="${i}">1</a>
-            <a class="page-link" th:if="${userType}=='MEMBER'" href="#"  th:href="@{/myPost(page=${i - 1})}" th:text="${i}">1</a>
+            <a class="page-link" th:if="${userType}=='ADMIN' and ${userNickName}!=null" href="#"  th:href="@{/adminUserPost(userNo=${userNo},page=${i - 1},searchKeyword = ${param.searchKeyword})}" th:text="${i}">1</a>
+            <a class="page-link" th:if="${userType}=='MEMBER'" href="#"  th:href="@{/myPost(page=${i - 1}, searchKeyword = ${param.searchKeyword})}" th:text="${i}">1</a>
           </li>
 
           <li class="page-item" th:classappend="${endPage == nowPage} ? 'disabled'">

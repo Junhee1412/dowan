@@ -171,6 +171,7 @@
         <hr class="border border-white">
       </div>
 <!--  검색하기  -->
+<!--
       <div  style="margin: 0 auto; width: 25%; ">
         <form th:action="@{/boardlist}" method="get">
           <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
@@ -183,10 +184,11 @@
           </div>
         </form>
       </div>
+-->
   
       <hr class="border border-white">
-      <!-- 페이지 -->
-      <nav class="marbot_100" aria-label="Page navigation example" >
+      <!-- 페이지 --><!--230225 아래줄에 th:style="${totalPage<=0 ? 'visibility:hidden' : 'visibility'}" 추가-->
+      <nav class="marbot_100" aria-label="Page navigation example" th:style="${totalPage<=0 ? 'visibility:hidden' : 'visibility'}">
         <ul class="pagination">
           <li class="page-item" th:classappend="${1 == nowPage} ? 'disabled'">
             <a class="page-link" href="#" aria-label="Previous" th:href="@{/myHeart(page=${startPage-1})}">

@@ -193,6 +193,7 @@
       </div>
 
 <!--   검색하기   -->
+<!--
       <div  style="margin: 0 auto; width: 25%; ">
         <form th:action="@{/adminUserReply}" method="get">
           <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
@@ -205,11 +206,12 @@
           </div>
         </form>
       </div>
-  
+-->
+
       <hr class="border border-white">
       <!--페이지-->
-
-      <nav  class="marbot_100" aria-label="Page navigation example" >
+      <!--230225 아래줄에 th:style="${totalPage<=0 ? 'visibility:hidden' : 'visibility'}" 추가-->
+      <nav  class="marbot_100" aria-label="Page navigation example" th:style="${totalPage<=0 ? 'visibility:hidden' : 'visibility'}">
         <ul class="pagination">
           <li class="page-item" th:classappend="${1 == nowPage} ? 'disabled'">
             <a class="page-link" th:if="${userType}=='ADMIN'" href="#" aria-label="Previous" th:href="@{/adminUserReply(userNo=${userNo},page=${startPage-1})}"><span aria-hidden="true">&laquo;</span></a>
@@ -220,7 +222,7 @@
             <a class="page-link" th:if="${userType}=='MEMBER'" href="#" aria-label="Previous" th:href="@{/myReply(page=${nowPage-2})}"><span aria-hidden="true">&lt;</span></a>
           </li>
           <li class="page-item" th:classappend="${i == nowPage} ? 'disabled'" th:each="i : ${#numbers.sequence(startPage, endPage)}" th:if="${i >= nowPage-5 and i <= nowPage+4}" >
-            <a class="page-link" th:if="${userType}=='ADMIN'" href="#"  th:href="@{/adminUserReply(userNo=${userNo},page=${i - 1}, searchKeyword = ${param.searchKeyword})}" th:text="${i}">1</a>
+            <a class="page-link" th:if="${userType}=='ADMIN'" href="#"  th:href="@{/adminUserReply(userNo=${userNo},page=${i - 1})}" th:text="${i}">1</a>
             <a class="page-link" th:if="${userType}=='MEMBER'" href="#"  th:href="@{/myReply(page=${i - 1})}" th:text="${i}">1</a>
           </li>
 

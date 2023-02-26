@@ -115,19 +115,19 @@ public class CommunityController {
         if(searchKeyword == null ) {
             lists = communityMasterRepository.findAllByCommunityId(id, pageable);
         }else {
-            //lists = communityService.communitySearchKeyword(searchKeyword,pageable); // 수정해야함.
             lists=communityMasterRepository.findBySubjectContainingAndCommunityId(searchKeyword,id,pageable);
-            //lists=communityMasterRepository.findBySubjectAndCommunityId(id, searchKeyword, pageable);
         } // 검색 끝?
 
         int nowPage = lists.getPageable().getPageNumber() + 1;
         int startPage = Math.max(0, 1);
         int endPage = Math.min(nowPage + 10, lists.getTotalPages());
+        int totalPage = lists.getTotalPages();
 
         model.addAttribute("list", lists);
         model.addAttribute("nowPage", nowPage);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
+        model.addAttribute("totalPage", totalPage);
         model.addAttribute("maxPage", 10);
         model.addAttribute("comid", id);
 
