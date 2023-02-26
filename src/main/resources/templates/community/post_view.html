@@ -77,21 +77,22 @@
                   <li class="dropdown"><a href="/"><span>Meow me, you</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
                       <ul>
                           <li><a href="business">사업소개</a></li>
-                          <li><a href="#">후원내역</a></li>
+                          <!--                <li><a th:href="@{/boardlist?(id=ADP_REV)}">후원내역</a></li>-->
                       </ul>
                   </li>
                   <li><a href="donatehome">후원하기</a></li>
                   <li class="dropdown"><a href="#"><span>물품거래</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
                       <ul>
-                          <li><a href="#">무료 나눔</a></li>
-                          <li><a href="#">중고 거래</a></li>
+                          <li><a th:href="@{/boardlist?(id=FRE_SEL)}">무료 나눔</a></li>
+                          <li><a th:href="@{/boardlist?(id=USD_TRN)}">중고 거래</a></li>
                       </ul>
                   </li>
                   <li class="dropdown"><a href="#"><span>커뮤니티</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
                       <ul>
-                          <li><a href="boardlist">분양하기</a></li>
-                          <li><a href="#">분양후기</a></li>
-                          <li><a href="#">캣스타그램</a></li>
+             <!--                <li><a th:href="@{/boardlist?(id=NOTICE)}">공지사항</a></li>-->
+                          <li><a th:href="@{/boardlist?(id=ADP_ACT)}">분양하기</a></li>
+                          <li><a th:href="@{/boardlist?(id=ADP_REV)}">분양후기</a></li>
+                          <li><a th:href="@{/boardlist?(id=CAT_STR)}">캣스타그램</a></li>
                       </ul>
                   </li>
                   <li class="dropdown"><a href="my_page"><span>마이페이지</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
@@ -293,12 +294,12 @@
 
 
     <div class="footer-btn-group" id="post_button_group">
-      <a type="button" class="btn btn-outline-primary" style="margin-right : 10px" th:if="${board.userNo == user.userNo}" th:href="@{/boardmodify/{postNo}(postNo=${board.postNo})}">
+      <a type="button" class="btn btn-outline-primary" style="margin-right : 10px" th:if="${board.userNo == user.userNo}" th:href="@{/boardmodify/{postNo}(postNo=${board.postNo},id=${comid})}">
 
         <i class="bi bi-pencil-square"></i> 수정하기
       </a>
       </a>
-      <a type="button" class="btn btn-outline-danger confirm_btn" th:if="${board.userNo == user.userNo}" th:href="@{/boarddelete?(postNo=${board.postNo})}">
+      <a type="button" class="btn btn-outline-danger confirm_btn" th:if="${board.userNo == user.userNo}" th:href="@{/boarddelete/(postNo=${board.postNo},id=${comid} )}">
         <i class="bi bi-trash-fill"></i> 삭제하기
       </a>
       <button type="button" class="btn btn-outline-dark">

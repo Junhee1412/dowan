@@ -120,7 +120,7 @@ public class MyPageController {
 
     @GetMapping("myReply") // 내 덧글 모아보기
     public String myReply(HttpSession session, Model model, @PageableDefault(page = 0,size = 10, sort = "postNo",
-             direction = Sort.Direction.DESC) Pageable pageable, String searchKeyword){
+            direction = Sort.Direction.DESC) Pageable pageable, String searchKeyword){
         if(session.getAttribute("user")==null){
             return "redirect:/";
         }else{
@@ -138,11 +138,13 @@ public class MyPageController {
             int nowPage = replies.getPageable().getPageNumber()+1 ;
             int startPage = Math.max(0 , 1);
             int endPage = Math.min(nowPage + 10 , replies.getTotalPages());
+            int totalPage= replies.getTotalPages();
 
             model.addAttribute("nowPage", nowPage);
             model.addAttribute("startPage", startPage);
             model.addAttribute("endPage", endPage);
             model.addAttribute("maxPage",10);
+            model.addAttribute("totalPage",totalPage);
 
             model.addAttribute("userNickName",loginUser.getNickName());
             model.addAttribute("replies",replies);
@@ -150,7 +152,6 @@ public class MyPageController {
             model.addAttribute("userType", loginUser.getUserType());
 
             return "user/user_reply_list";
-            //return "user/user_post_list";
         }
     }
 
@@ -186,11 +187,13 @@ public class MyPageController {
             int nowPage = likes.getPageable().getPageNumber()+1 ;
             int startPage = Math.max(0 , 1);
             int endPage = Math.min(nowPage + 10 , likes.getTotalPages());
+            int totalPage= likes.getTotalPages();
 
             model.addAttribute("nowPage", nowPage);
             model.addAttribute("startPage", startPage);
             model.addAttribute("endPage", endPage);
             model.addAttribute("maxPage",10);
+            model.addAttribute("totalPage", totalPage);
 
             model.addAttribute("userNickName",loginUser.getNickName());
             model.addAttribute("likes",likes);

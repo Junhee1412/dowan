@@ -39,7 +39,7 @@ public class CommunityServiceImpl implements CommunityService{
     //글 작성
     public void write(CommunityMaster communityMaster){
 
-        communityMaster.setCommunityId("ADP_ACT");
+        communityMaster.setCommunityId(communityMaster.getCommunityId());
         communityMaster.setPostId("ADT_ING");
         communityMaster.setCreatePostDate(LocalDateTime.now());
 
@@ -187,6 +187,9 @@ public class CommunityServiceImpl implements CommunityService{
     public Page<CommunityMaster> searchBySubjectAndUser(String searchKeyword, Long userNo, Pageable pageable){
         return communityMasterRepository.findBySubjectContainingAndUserNo(searchKeyword,userNo,pageable);
     }
+
+
+
 }
 
 
