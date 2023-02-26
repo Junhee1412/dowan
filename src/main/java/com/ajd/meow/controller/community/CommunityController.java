@@ -140,8 +140,7 @@ public String communityList(String id, @PageableDefault(page = 0, size = 12, sor
 
 
         communityService.communityPostDelete(postNo);
-
-        model.addAttribute("message", "글 작성 완료.");
+        model.addAttribute("message", "글 삭제 완료.");
         model.addAttribute("SearchUrl", "/boardlist?id="+comid);
 
         return "community/community_message";
