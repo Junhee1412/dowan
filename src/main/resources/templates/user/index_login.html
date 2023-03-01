@@ -69,7 +69,7 @@
             <li class="dropdown"><a href="/"><span>Meow me, you</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
                 <li><a href="business">사업소개</a></li>
-                <li><a th:href="@{/boardlist?(id=ADP_REV)}">후원내역</a></li>
+<!--                <li><a th:href="@{/boardlist?(id=ADP_REV)}">후원내역</a></li>-->
               </ul>
             </li>
             <li><a href="donatehome">후원하기</a></li>
@@ -81,6 +81,7 @@
             </li>
             <li class="dropdown"><a href="#"><span>커뮤니티</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
+   <!--                <li><a th:href="@{/boardlist?(id=NOTICE)}">공지사항</a></li>-->
                 <li><a th:href="@{/boardlist?(id=ADP_ACT)}">분양하기</a></li>
                 <li><a th:href="@{/boardlist?(id=ADP_REV)}">분양후기</a></li>
                 <li><a th:href="@{/boardlist?(id=CAT_STR)}">캣스타그램</a></li>
@@ -134,10 +135,10 @@
               다양한 물건을 판매하고 구매할 수 있는 공간!
             </p>
             <div class="row d-flex justify-content-center">
-            <a class="btn btn-outline-dark btn-sm fs-5 col-2 mt-4" href="#"
+            <a class="btn btn-outline-dark btn-sm fs-5 col-2 mt-4" th:href="@{/boardlist?(id=USD_TRN)}"
               >중고거래</a
             ><br />
-            <a class="btn btn-outline-dark btn-sm fs-5 col-2 mt-4" href="#"
+            <a class="btn btn-outline-dark btn-sm fs-5 col-2 mt-4" th:href="@{/boardlist?(id=FRE_SEL)}"
               >무료나눔</a
             >
           </div>
@@ -152,10 +153,10 @@
         <h3 class="mb-3">유리창 너머를 꿈꾸는 아이들에게</h3>
         <h3 class="mb-5">당신이라는 꿈을 선물해주세요</h3>
 
-        <a class="btn btn-outline-light btn-lg fs-5 mb-3" style=" border-radius: 25px;" href="#"
+        <a class="btn btn-outline-light btn-lg fs-5 mb-3" style=" border-radius: 25px;" th:href="@{/boardlist?(id=ADP_ACT)}"
           >분양하기 바로가기</a
         ><br />
-        <a class="btn btn-outline-light btn-lg fs-5"  style=" border-radius: 25px;" href="#"
+        <a class="btn btn-outline-light btn-lg fs-5"  style=" border-radius: 25px;" th:href="@{/boardlist?(id=ADP_REV)}"
           >분양후기 바로가기</a
         >
       </section>
@@ -173,15 +174,15 @@
         <img src="../img/aside/donate_aside.png" class="img_aside" alt="후원하기"
       /></a>
       </div>
-    <div>
-      <a
-        href="javascript:openDetail('/chat_btn')" class="enter_chat"
-        data-toggle="tooltip" data-placement="top" title="Chat"
-        id="chat_btn"
-      >
-        <img src="../img/aside/chat_aside.png" class="chat_img" alt="채팅상담"
-      /></a>
-    </div>
+<!--    <div>-->
+<!--      <a-->
+<!--        href="javascript:openDetail('/chat_btn')" class="enter_chat"-->
+<!--        data-toggle="tooltip" data-placement="top" title="Chat"-->
+<!--        id="chat_btn"-->
+<!--      >-->
+<!--        <img src="../img/aside/chat_aside.png" class="chat_img" alt="채팅상담"-->
+<!--      /></a>-->
+<!--    </div>-->
 
     <!-- community -->
     <section class="content-section" id="catstar_commu">
@@ -237,7 +238,7 @@
           </div>
           <a class="btn btn-outline-secondary btn-sm fs-6"
             id="catstargram_btn"
-            href="#">더 보기</a>
+             th:href="@{/boardlist?(id=CAT_STR)}">더 보기</a>
         </div>
       </div>
     </section>

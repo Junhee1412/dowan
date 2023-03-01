@@ -239,6 +239,7 @@ public class AdminController {
 
 
 
+
     @GetMapping("adminUserDonate") // 해당 유저의 도네이트(후원) 리스트
     public String userAllDonate(HttpSession session, Long userNo, Model model, @PageableDefault(page = 0,size = 10, sort = "donateCode", direction = Sort.Direction.DESC) Pageable pageable){
         if(session.getAttribute("user")==null){
@@ -255,18 +256,16 @@ public class AdminController {
                 int nowPage = userAllDonateList.getPageable().getPageNumber()+1 ;
                 int startPage = Math.max(0 , 1);
                 int endPage = Math.min(nowPage + 10 , userAllDonateList.getTotalPages());
-                int totalPage=userAllDonateList.getTotalPages();
 
                 model.addAttribute("nowPage", nowPage);
                 model.addAttribute("startPage", startPage);
                 model.addAttribute("endPage", endPage);
                 model.addAttribute("maxPage",10);
-                model.addAttribute("totalPage", totalPage);
 
                 //추가
                 model.addAttribute("userType", userService.getUser(userNo).getUserType());
 
-                return "admin/admin_donate_list";
+                return "admin/admin_donate_list";//"donate/my_donate_list";
             }else{
                 return "redirect:/";
             }
@@ -287,13 +286,11 @@ public class AdminController {
                 int nowPage = userAllReplyList.getPageable().getPageNumber()+1 ;
                 int startPage = Math.max(0 , 1);
                 int endPage = Math.min(nowPage + 10 , userAllReplyList.getTotalPages());
-                int totalPage= userAllReplyList.getTotalPages();
 
                 model.addAttribute("nowPage", nowPage);
                 model.addAttribute("startPage", startPage);
                 model.addAttribute("endPage", endPage);
                 model.addAttribute("maxPage",10);
-                model.addAttribute("totalPage",totalPage);
 
                 model.addAttribute("userNickName",userService.getUser(userNo).getNickName());
                 model.addAttribute("replies",userAllReplyList);
@@ -382,14 +379,12 @@ public class AdminController {
                 int nowPage = donateMaster.getPageable().getPageNumber()+1 ;
                 int startPage = Math.max(0 , 1);
                 int endPage = Math.min(nowPage + 10 , donateMaster.getTotalPages());
-                int totalPage=donateMaster.getTotalPages();
 
                 model.addAttribute("list",donateMaster);
                 model.addAttribute("nowPage", nowPage);
                 model.addAttribute("startPage", startPage);
                 model.addAttribute("endPage", endPage);
                 model.addAttribute("maxPage",10);
-                model.addAttribute("totalPage", totalPage);
 
                 //추가
                 model.addAttribute("userType",user.getUserType());

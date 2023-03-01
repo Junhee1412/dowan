@@ -120,7 +120,7 @@ public class MyPageController {
 
     @GetMapping("myReply") // 내 덧글 모아보기
     public String myReply(HttpSession session, Model model, @PageableDefault(page = 0,size = 10, sort = "postNo",
-             direction = Sort.Direction.DESC) Pageable pageable, String searchKeyword){
+            direction = Sort.Direction.DESC) Pageable pageable, String searchKeyword){
         if(session.getAttribute("user")==null){
             return "redirect:/";
         }else{

@@ -123,7 +123,7 @@ public class DonateController {
 
     @GetMapping("/donatelist")
     public String donatelistForm(@PageableDefault(page = 0,size = 10, sort = "donateCode", direction = Sort.Direction.DESC)
-                                     Pageable pageable, HttpSession session, Model model){
+                                 Pageable pageable, HttpSession session, Model model){
 
         UserMaster loginUser=userService.getUserMaster((UserMaster)session.getAttribute("user"));
         model.addAttribute("user",loginUser);

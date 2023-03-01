@@ -1,14 +1,13 @@
 package com.ajd.meow.service.community;
 
 
-import com.ajd.meow.entity.CommunityImage;
-import com.ajd.meow.entity.CommunityLike;
-import com.ajd.meow.entity.CommunityMaster;
-import com.ajd.meow.entity.UserMaster;
+import com.ajd.meow.entity.*;
 import com.ajd.meow.repository.community.CommunityImageRepository;
 import com.ajd.meow.repository.community.CommunityLikeRepository;
 import com.ajd.meow.repository.community.CommunityMasterRepository;
+import com.ajd.meow.repository.community.SecondHandTradeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,15 +34,27 @@ public class CommunityServiceImpl implements CommunityService{
     @Autowired
     private CommunityImageRepository communityImageRepository;
 
+    @Bean
+    private SecondHandTrade getSecondHandTrade(){
+        return new SecondHandTrade();
+    }
 
-    //글 작성 230224 수정
-    public void write(CommunityMaster communityMaster){
+    //글 작성
+    @Autowired
+    private SecondHandTradeRepository secondHandTradeRepository;
 
-        //communityMaster.setCommunityId("ADP_ACT");
-        communityMaster.setPostId("ADT_ING"); // 이거 나중에 select창 넣으면 빼면 됨
+    public void write(CommunityMaster communityMaster, int price){
+
+        communityMaster.setCommunityId(communityMaster.getCommunityId());
         communityMaster.setCreatePostDate(LocalDateTime.now());
-
         communityMasterRepository.save(communityMaster);
+
+        if(communityMaster.getCommunityId().equals("USD_TRN")){
+            SecondHandTrade secondHandTrade=getSecondHandTrade();
+            secondHandTrade.setPostNo(communityMaster.getPostNo());
+            secondHandTrade.setPrice(price);
+            secondHandTradeRepository.save(secondHandTrade);
+        }
     }
 
     //파일 업로드
@@ -55,8 +66,8 @@ public class CommunityServiceImpl implements CommunityService{
         if (files.isEmpty()) {
             return null;
         }
-        //프로젝트 경로
-        String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
+        //프로젝트 경로 System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files"
+        String projectPath = "/home/ec2-user/imges";
         //uuid 랜덤
         UUID uuid = UUID.randomUUID();
         //파일 랜덤이름지정
@@ -74,8 +85,9 @@ public class CommunityServiceImpl implements CommunityService{
                 .postNo(communityMaster.getPostNo())
                 .build();
 
+
         files.transferTo(saveImg);
-        communityMaster.setSumImg(file.getImgPath());
+        communityMaster.setSumImg(file.getImgName());
         CommunityImage savedFile = communityImageRepository.save(file);
 
         return savedFile.getImageNo();
@@ -125,6 +137,7 @@ public class CommunityServiceImpl implements CommunityService{
 
 
     public Page<CommunityMaster> communitySearchKeyword(String searchKeyword,Pageable pageable){
+
         return communityMasterRepository.findBySubjectContaining(searchKeyword, pageable);
     }
 
@@ -177,8 +190,6 @@ public class CommunityServiceImpl implements CommunityService{
         }
     }
 
-
-
     // 230225 추가
     public Page<CommunityMaster> searchBySubjectAndComid(String searchKeyword, String communityId, Pageable pageable){
         return communityMasterRepository.findBySubjectContainingAndCommunityId(searchKeyword,communityId,pageable);
@@ -187,6 +198,10 @@ public class CommunityServiceImpl implements CommunityService{
     public Page<CommunityMaster> searchBySubjectAndUser(String searchKeyword, Long userNo, Pageable pageable){
         return communityMasterRepository.findBySubjectContainingAndUserNo(searchKeyword,userNo,pageable);
     }
+
+
+
+
 }
 
 
