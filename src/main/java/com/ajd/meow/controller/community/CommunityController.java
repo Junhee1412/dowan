@@ -1,11 +1,9 @@
 package com.ajd.meow.controller.community;
 
-import com.ajd.meow.entity.CommunityImage;
-import com.ajd.meow.entity.CommunityLike;
-import com.ajd.meow.entity.CommunityMaster;
-import com.ajd.meow.entity.UserMaster;
+import com.ajd.meow.entity.*;
 import com.ajd.meow.repository.community.CommunityImageRepository;
 import com.ajd.meow.repository.community.CommunityMasterRepository;
+import com.ajd.meow.repository.community.SecondHandTradeRepository;
 import com.ajd.meow.service.community.CommunityService;
 import com.ajd.meow.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +34,9 @@ public class CommunityController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired // 230301 추가
+    private SecondHandTradeRepository secondHandTradeRepository;
 
 
     @GetMapping("/boardwrite") //localhost:8080/boardwrite 작성시 이동
@@ -100,6 +101,7 @@ public String communityList(String id, @PageableDefault(page = 0, size = 12, sor
         model.addAttribute("totalPage", totalPage);
         model.addAttribute("maxPage", 10);
         model.addAttribute("comid",id );
+        model.addAttribute("member",loginUser.getUserType());// 230301 추가
 
         return "community/post_list";
 
@@ -129,6 +131,9 @@ public String communityList(String id, @PageableDefault(page = 0, size = 12, sor
             System.out.println("빈하트");
             model.addAttribute("clickHeart",false);
         }
+
+        // 230301 추가 - 가격 추가
+        model.addAttribute("price",secondHandTradeRepository.findById(postNo).get().getPrice());
         return "community/post_view";
     }
 

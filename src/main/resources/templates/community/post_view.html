@@ -306,6 +306,9 @@
             <img th:unless="${board.getUserMaster().getProfileImagePath() != null}" src="../img/noimg.gif" style="width:100px;,height:100px;" class="rounded-circle"/>
         </div>
         <ul>
+          <!-- 230301 추가 -->
+          <li>가격 : <span th:text="${price}"></span></li>
+          <!-- 230301 끝 -->
           <li>작성자    : <span th:text="${board.getUserMaster().getNickName()}" >작성자</span></li>
           <li>작성일자  : <span th:text="${#temporals.format(board.createPostDate, 'yyyy-MM-dd HH:mm:ss')}">작성일자</span></li>
           <li>조회수    : <span th:text="${board.viewCount}"></span></li>
