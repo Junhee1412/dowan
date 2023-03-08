@@ -307,7 +307,7 @@
         </div>
         <ul>
           <!-- 230301 추가 -->
-          <li>가격 : <span th:text="${price}"></span></li>
+          <li th:if="${comid}=='USD_TRN'">가격 : <span th:text="${price}"></span></li>
           <!-- 230301 끝 -->
           <li>작성자    : <span th:text="${board.getUserMaster().getNickName()}" >작성자</span></li>
           <li>작성일자  : <span th:text="${#temporals.format(board.createPostDate, 'yyyy-MM-dd HH:mm:ss')}">작성일자</span></li>
@@ -390,7 +390,7 @@
         <i class="bi bi-trash-fill"></i> 삭제하기
       </a>
       <button type="button" class="btn btn-outline-dark">
-        <a href="/boardlist"> <i class="bi bi-list"></i> 목록으로</a>
+        <a th:href="@{/boardlist(id=${comid})}"> <i class="bi bi-list"></i> 목록으로</a>
       </button>
     </div>
    

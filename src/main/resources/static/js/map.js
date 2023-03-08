@@ -40,7 +40,12 @@ function drawMap(locations, area_select){
             center: new kakao.maps.LatLng(35.268543, 129.075210),
             level: 7
         };}
-        else if(area_select=='대전'){
+    else if(area_select=='울산'){
+        center_area={
+            center: new kakao.maps.LatLng(35.556796, 129.248462),
+            level: 7
+        };}
+    else if(area_select=='대전'){
         center_area={
             center: new kakao.maps.LatLng(36.350539, 127.384857),
             level: 4

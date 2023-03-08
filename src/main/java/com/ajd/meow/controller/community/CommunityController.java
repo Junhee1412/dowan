@@ -133,7 +133,9 @@ public String communityList(String id, @PageableDefault(page = 0, size = 12, sor
         }
 
         // 230301 추가 - 가격 추가
-        model.addAttribute("price",secondHandTradeRepository.findById(postNo).get().getPrice());
+        if(communityService.communityPostView(postNo).getCommunityId().equals("USD_TRN")){
+            model.addAttribute("price",secondHandTradeRepository.findById(postNo).get().getPrice());
+        }
         return "community/post_view";
     }
 
@@ -160,11 +162,16 @@ public String communityList(String id, @PageableDefault(page = 0, size = 12, sor
 
         model.addAttribute("board", communityService.communityPostView(postNo));
         model.addAttribute("orgName", communityService.communityImgFindByPostNo(postNo));
+        // 이후 추가
+        if(communityService.communityPostView(postNo).getCommunityId().equals("USD_TRN")){
+            model.addAttribute("price",secondHandTradeRepository.findById(postNo).get().getPrice());
+        }
+        // 이후 추가 끗
             return "community/post_modify";
     }
 
     @PostMapping("/boardupdate/{postNo}")
-    public String communityPostModify(String id,@PathVariable("postNo") Long postNo, HttpSession session, CommunityMaster communityMaster, Model model, @RequestParam("files") List<MultipartFile> files,CommunityImage communityImage) throws Exception {
+    public String communityPostModify(String id,@PathVariable("postNo") Long postNo, HttpSession session, CommunityMaster communityMaster, int price, Model model, @RequestParam("files") List<MultipartFile> files,CommunityImage communityImage) throws Exception {
         UserMaster loginUser = (UserMaster) session.getAttribute("user");
 
         model.addAttribute("user", loginUser);
@@ -188,6 +195,13 @@ public String communityList(String id, @PageableDefault(page = 0, size = 12, sor
 
         boardTemp.setSubject(communityMaster.getSubject());
         boardTemp.setContent(communityMaster.getContent());
+        // 이후 추가
+        boardTemp.setPostId(communityMaster.getPostId());
+        if(boardTemp.getCommunityId().equals("USD_TRN")){
+            secondHandTradeRepository.findById(postNo).get().setPrice(price);
+            secondHandTradeRepository.save(secondHandTradeRepository.findById(postNo).get());
+        }
+        // 이후 추가 끗
 
         communityService.communityPostModify(boardTemp);
 
