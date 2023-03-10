@@ -369,6 +369,6 @@ html {
 }
 
 .dummy{
-  height:5000px;
-  background-color:black;
+  margin-top:105px;
+  width:100%;
 }

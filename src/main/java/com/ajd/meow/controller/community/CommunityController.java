@@ -1,11 +1,9 @@
 package com.ajd.meow.controller.community;
 
-import com.ajd.meow.entity.CommunityImage;
-import com.ajd.meow.entity.CommunityLike;
-import com.ajd.meow.entity.CommunityMaster;
-import com.ajd.meow.entity.UserMaster;
+import com.ajd.meow.entity.*;
 import com.ajd.meow.repository.community.CommunityImageRepository;
 import com.ajd.meow.repository.community.CommunityMasterRepository;
+import com.ajd.meow.repository.community.SecondHandTradeRepository;
 import com.ajd.meow.service.community.CommunityService;
 import com.ajd.meow.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,24 +35,29 @@ public class CommunityController {
     @Autowired
     private UserService userService;
 
+    @Autowired // 230301 추가
+    private SecondHandTradeRepository secondHandTradeRepository;
+
 
     @GetMapping("/boardwrite") //localhost:8080/boardwrite 작성시 이동
-    public String boardWriteForm(HttpSession session, Model model) {
+    public String boardWriteForm(String id,HttpSession session, Model model) {
         UserMaster loginUser = (UserMaster) session.getAttribute("user");
         model.addAttribute("user", loginUser);
+        model.addAttribute("comid",id);
 
         return "community/post_insert";
     }
 
 
     @PostMapping("/boardwritepro")
-    public String boardWritePro(HttpSession session, Model model, CommunityMaster communityMaster,
+    public String boardWritePro(HttpSession session, Model model, CommunityMaster communityMaster, int price,
                                 @RequestParam("files") List<MultipartFile> files) throws Exception {
+        System.out.println("111111111111111111111111");
 
         UserMaster loginUser = (UserMaster) session.getAttribute("user");
         model.addAttribute("user", loginUser);
 
-        communityService.write(communityMaster);
+        communityService.write(communityMaster, price);
 
         for (MultipartFile img : files) {
             communityMaster.setPostNo(communityMaster.getPostNo());
@@ -62,49 +65,18 @@ public class CommunityController {
 
             communityService.saveFile(img, session, model, communityMaster);
         }
-            model.addAttribute("message", "글 작성 완료.");
-            model.addAttribute("SearchUrl", "/boardlist");
+        model.addAttribute("message", "글 작성 완료.");
+        model.addAttribute("SearchUrl", "/boardlist?id="+communityMaster.getCommunityId());
 //        return "redirect:/boardlist";
         return "community/community_message";
     }
 
-//    @GetMapping("/boardlist")
-//    public String communityList(@PageableDefault(page = 0, size = 12, sort = "postNo", direction = Sort.Direction.DESC) Pageable pageable, HttpSession session, Model model,
-//                            String id, CommunityMaster communityMaster, String searchKeyword) {
-//
-//        UserMaster loginUser = (UserMaster) session.getAttribute("user");
-//        model.addAttribute("user", loginUser);
-//
-//
-//        if(id=="ADP_ACT"){
-//            communityService.communityList(pageable);
-//        }
-//        //검색
-//        Page<CommunityMaster> lists = null;
-//
-//            if(searchKeyword == null ) {
-//                 lists = communityService.communityList(pageable);
-//            }else {
-//                lists = communityService.communitySearchKeyword(searchKeyword,pageable);
-//            }
-//
-//        int nowPage = lists.getPageable().getPageNumber() + 1;
-//        int startPage = Math.max(0, 1);
-//        int endPage = Math.min(nowPage + 10, lists.getTotalPages());
-//
-//        model.addAttribute("list", lists);
-//        model.addAttribute("nowPage", nowPage);
-//        model.addAttribute("startPage", startPage);
-//        model.addAttribute("endPage", endPage);
-//        model.addAttribute("maxPage", 10);
-//
-//        return "community/post_list";
-//    }
-    @GetMapping("boardlist") // 내가 해보고 잇는거 230223 추가
-    public String communityList(String id, @PageableDefault(page = 0, size = 12, sort = "postNo", direction = Sort.Direction.DESC) Pageable pageable, HttpSession session, Model model, String searchKeyword){
-        if(session.getAttribute("user")==null){
-            return "redirect:/";
-        }else{
+
+@GetMapping("boardlist") // 내가 해보고 잇는거 230223 추가
+public String communityList(String id, @PageableDefault(page = 0, size = 12, sort = "postNo", direction = Sort.Direction.DESC) Pageable pageable, HttpSession session, Model model, String searchKeyword){
+    if(session.getAttribute("user")==null){
+        return "redirect:/";
+    }else{
         UserMaster loginUser=userService.getUserMaster((UserMaster)session.getAttribute("user"));
         model.addAttribute("user", loginUser);
 
@@ -114,19 +86,22 @@ public class CommunityController {
         if(searchKeyword == null ) {
             lists = communityMasterRepository.findAllByCommunityId(id, pageable);
         }else {
-            lists = communityService.communitySearchKeyword(searchKeyword,pageable); // 수정해야함.
+            lists=communityMasterRepository.findBySubjectContainingAndCommunityId(searchKeyword,id,pageable);
         } // 검색 끝?
 
         int nowPage = lists.getPageable().getPageNumber() + 1;
         int startPage = Math.max(0, 1);
         int endPage = Math.min(nowPage + 10, lists.getTotalPages());
+        int totalPage = lists.getTotalPages();
 
         model.addAttribute("list", lists);
         model.addAttribute("nowPage", nowPage);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
+        model.addAttribute("totalPage", totalPage);
         model.addAttribute("maxPage", 10);
-        model.addAttribute("comid", id);
+        model.addAttribute("comid",id );
+        model.addAttribute("member",loginUser.getUserType());// 230301 추가
 
         return "community/post_list";
 
@@ -134,9 +109,10 @@ public class CommunityController {
 }
 
     @GetMapping("/boardview") //localhost:8080/post/view?postNo=1
-    public String communityPostView(HttpSession session, Model model, Long postNo, CommunityImage communityImage) {
+    public String communityPostView(String id,HttpSession session, Model model, Long postNo, CommunityImage communityImage) {
         UserMaster loginUser = (UserMaster) session.getAttribute("user");
         model.addAttribute("user", loginUser);
+        model.addAttribute("comid",id);
 
         List<CommunityImage> filess = communityImageRepository.findByPostNo(postNo);
 
@@ -155,33 +131,51 @@ public class CommunityController {
             System.out.println("빈하트");
             model.addAttribute("clickHeart",false);
         }
+
+        // 230301 추가 - 가격 추가
+        if(communityService.communityPostView(postNo).getCommunityId().equals("USD_TRN")){
+            model.addAttribute("price",secondHandTradeRepository.findById(postNo).get().getPrice());
+        }
         return "community/post_view";
     }
 
     @GetMapping("/boarddelete")
-    public String communityPostDelete(HttpSession session, Model model, Long postNo) {
+    public String communityPostDelete(HttpSession session, Model model, Long postNo, CommunityMaster communityMaster) {
         UserMaster loginUser = (UserMaster) session.getAttribute("user");
         model.addAttribute("user", loginUser);
+        String comid=communityService.communityPostView(postNo).getCommunityId();
+
+
 
         communityService.communityPostDelete(postNo);
-        return "redirect:/boardlist";
+
+        model.addAttribute("message", "글 작성 완료.");
+        model.addAttribute("SearchUrl", "/boardlist?id="+comid);
+
+        return "community/community_message";
     }
 
     @GetMapping("/boardmodify/{postNo}")
-    public String boardModify(@PathVariable("postNo") Long postNo, HttpSession session, Model model,CommunityImage communityImage) {
+    public String boardModify(String id,@PathVariable("postNo") Long postNo, HttpSession session, Model model,CommunityImage communityImage) {
         UserMaster loginUser = (UserMaster) session.getAttribute("user");
         model.addAttribute("user", loginUser);
 
         model.addAttribute("board", communityService.communityPostView(postNo));
         model.addAttribute("orgName", communityService.communityImgFindByPostNo(postNo));
+        // 이후 추가
+        if(communityService.communityPostView(postNo).getCommunityId().equals("USD_TRN")){
+            model.addAttribute("price",secondHandTradeRepository.findById(postNo).get().getPrice());
+        }
+        // 이후 추가 끗
             return "community/post_modify";
     }
 
     @PostMapping("/boardupdate/{postNo}")
-    public String communityPostModify(@PathVariable("postNo") Long postNo, HttpSession session, CommunityMaster communityMaster, Model model, @RequestParam("files") List<MultipartFile> files,CommunityImage communityImage) throws Exception {
+    public String communityPostModify(String id,@PathVariable("postNo") Long postNo, HttpSession session, CommunityMaster communityMaster, int price, Model model, @RequestParam("files") List<MultipartFile> files,CommunityImage communityImage) throws Exception {
         UserMaster loginUser = (UserMaster) session.getAttribute("user");
 
         model.addAttribute("user", loginUser);
+        model.addAttribute("comid",id);
         CommunityMaster boardTemp = communityService.communityPostView(postNo);
 
         int count = 0;
@@ -195,18 +189,25 @@ public class CommunityController {
                 }
                 communityService.saveFile(img, session, model, communityMaster);
                 count++;
-                boardTemp.setSumImg(communityService.communityImgFindByPostNo(postNo).get(0).getImgPath());
+                boardTemp.setSumImg(communityService.communityImgFindByPostNo(postNo).get(0).getImgName());
             }
         }
 
         boardTemp.setSubject(communityMaster.getSubject());
         boardTemp.setContent(communityMaster.getContent());
+        // 이후 추가
+        boardTemp.setPostId(communityMaster.getPostId());
+        if(boardTemp.getCommunityId().equals("USD_TRN")){
+            secondHandTradeRepository.findById(postNo).get().setPrice(price);
+            secondHandTradeRepository.save(secondHandTradeRepository.findById(postNo).get());
+        }
+        // 이후 추가 끗
 
         communityService.communityPostModify(boardTemp);
 
         // 글 작성 완료 안내문
         model.addAttribute("message", "글 수정 완료.");
-        model.addAttribute("SearchUrl", "/boardlist");
+        model.addAttribute("SearchUrl", "/boardlist?id="+communityService.communityPostView(postNo).getCommunityId());
 
         return "community/community_message";
     }

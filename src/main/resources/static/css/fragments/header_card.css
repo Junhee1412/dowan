@@ -1,0 +1,34 @@
+
+.header-card {
+  width: 100%;
+  height: 400px;
+  margin-top: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-card .card {
+  width: 900px;
+  height: 300px;
+}
+
+.bg-crop {
+  position: relative;
+  width: 900px;
+  height: 300px;
+  overflow: hidden;
+}
+
+.bg-menu {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  width: 900px;
+  height: 700px;
+  opacity: 0.6;
+}
+
+.card-title{
+  margin-top: 100px;
+}

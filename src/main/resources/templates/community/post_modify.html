@@ -9,16 +9,13 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <meta property="og:type" content="website" />
-    <meta
-      property="og:url"
-      content="http://mintable1.cafe24.com/Meow_me_you_front/html/"
-    />
+    <meta property="og:url" content="http://meowmeyou.com/"/>
     <meta property="og:title" content="미유미유" />
     <meta property="og:description" content="너와 나의 이야기가 펼쳐지는 곳" />
    <link href="/css/bootstrap-icons.css" rel="stylesheet">
     <meta
       property="og:image"
-      content="http://mintable1.cafe24.com/Meow_me_you_front/img/kakao_preview.jpg"
+      content="http://meowmeyou.com/img/index/kakao_preview.jpg"
     />
     <meta
       property="og:site_name"
@@ -79,30 +76,40 @@
             <li class="dropdown"><a href="/"><span>Meow me, you</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
                 <li><a href="business">사업소개</a></li>
-                <li><a href="#">후원내역</a></li>
+                <!--                <li><a th:href="@{/boardlist?(id=ADP_REV)}">후원내역</a></li>-->
               </ul>
             </li>
             <li><a href="donatehome">후원하기</a></li>
             <li class="dropdown"><a href="#"><span>물품거래</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
-                <li><a href="#">무료 나눔</a></li>
-                <li><a href="#">중고 거래</a></li>
+                <li><a th:href="@{/boardlist?(id=FRE_SEL)}">무료 나눔</a></li>
+                <li><a th:href="@{/boardlist?(id=USD_TRN)}">중고 거래</a></li>
               </ul>
             </li>
             <li class="dropdown"><a href="#"><span>커뮤니티</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
-                <li><a href="boardlist">분양하기</a></li>
-                <li><a href="#">분양후기</a></li>
-                <li><a href="#">캣스타그램</a></li>
+                <li><a th:href="@{/boardlist?(id=NOTICE)}">공지사항</a></li>
+                <li><a th:href="@{/boardlist?(id=ADP_ACT)}">분양하기</a></li>
+                <li><a th:href="@{/boardlist?(id=ADP_REV)}">분양후기</a></li>
+                <li><a th:href="@{/boardlist?(id=CAT_STR)}">캣스타그램</a></li>
               </ul>
             </li>
-            <li class="dropdown"><a href="my_page"><span>마이페이지</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+            <li th:if="${user.userType}=='MEMBER'" class="dropdown"><a href="my_page"><span>마이페이지</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
                 <li><a href="myPost">내 글 모아보기</a></li>
                 <li><a href="myReply">내가 쓴 댓글 모아보기</a></li>
                 <li><a href="myHeart">좋아요 목록 보기</a></li>
                 <li><a href="donatelist">내 후원 목록보기</a></li>
                 <li><a href="modifyUser">회원정보 수정하기</a></li>
+              </ul>
+            </li>
+            <li th:if="${user.userType}=='ADMIN'" class="dropdown"><a href="adminMypage"><span>관리자마이페이지</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+              <ul>
+                <li><a href="adminMypage">관리자마이페이지</a></li>
+                <li><a href="adminUserList">유저 리스트</a></li>
+                <li><a href="adminPostManage">전체 글</a></li>
+                <li><a href="adminDonatemanage">후원 내역</a></li>
+                <li><a href="adminModify">관리자 수정</a></li>
               </ul>
             </li>
             <li><a class="get-a-quote" href="logout">로그아웃</a></li>
@@ -113,29 +120,114 @@
       </div>
     </header><!-- End Header -->
 
-     <div class="header-card">
-      <div class="card bg-crop">
-        <img
-          src="../img/mypost/post.jpg"
-          class="card-img rounded mx-auto d-block bg-menu"
-          alt="커뮤니티설명"
-        />
-        <div class="card-img-overlay" id="community_type">
-          <h5 class="card-title text-dark text-center fs-1">
-            분양하기 커뮤니티
-          </h5>
-          <p class="card-text text-dark text-center fs-3">
-            고양이를 분양을 하는 곳입니다. 새로운 가족을 찾아주세요~
-          </p>
+    <div th:switch="${board.communityId}">
+
+        <div th:case="'ADP_ACT'" class="header-card">
+            <div class="card bg-crop">
+                <img src="../img/banner/adopt_action_banner.jpg" class="card-img rounded mx-auto d-block bg-menu" alt="커뮤니티설명" style="top:-250px;left:0px;"/>
+                <div class="card-img-overlay">
+                    <h5 class="card-title text-dark text-center fs-1">
+                        분양하기 커뮤니티
+                    </h5>
+                    <p class="card-text text-dark text-center fs-3">
+                        고양이를 분양을 하는 곳입니다. 새로운 가족을 찾아주세요~
+                    </p>
+                </div>
+            </div>
         </div>
-      </div>
-     </div>
+
+        <div th:case="'ADP_REV'" class="header-card">
+            <div class="card bg-crop">
+                <img src="../img/banner/adopt_review_banner.jpg" class="card-img rounded mx-auto d-block bg-menu" alt="커뮤니티설명" style="top:-100px;left:0px;"/>
+                <div class="card-img-overlay">
+                    <h5 class="card-title text-dark text-center fs-1">
+                        분양후기 커뮤니티
+                    </h5>
+                    <p class="card-text text-dark text-center fs-3">
+                        분양 받은 고양이들이 어떻게 지내고 있는지 알려주세요!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div th:case="'CAT_STR'" class="header-card">
+            <div class="card bg-crop">
+                <img src="../img/banner/cat_star_banner.jpg" class="card-img rounded mx-auto d-block bg-menu" alt="커뮤니티설명" style="top:-150px;left:0px;"/>
+                <div class="card-img-overlay">
+                    <h5 class="card-title text-dark text-center fs-1">
+                        캣스타그램
+                    </h5>
+                    <p class="card-text text-dark text-center fs-3">
+                        고양이들의 일상을 적어보는 커뮤니티!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div th:case="'DON_HST'" class="header-card">
+            <div class="card bg-crop">
+                <img src="../img/banner/donate_banner.jpg" class="card-img rounded mx-auto d-block bg-menu" alt="커뮤니티설명" style="top:-150px;left:0px;"/>
+                <div class="card-img-overlay">
+                    <h5 class="card-title text-dark text-center fs-1">
+                        Meow me you 후원내역입니다.
+                    </h5>
+                    <p class="card-text text-dark text-center fs-3">
+                        후원해주신 모금액은 아래와 같이 전달되고 있습니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div th:case="'FRE_SEL'" class="header-card">
+            <div class="card bg-crop">
+                <img src="../img/banner/free_sell_banner.jpg" class="card-img rounded mx-auto d-block bg-menu" alt="커뮤니티설명"  style="top:-100px;left:0px;"/>
+                <div class="card-img-overlay">
+                    <h5 class="card-title text-dark text-center fs-1">
+                        고양이, 집사용품 무료나눔!
+                    </h5>
+                    <p class="card-text text-dark text-center fs-3">
+                        가지고 있기에 아까운 물품들을 나눠주세요!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div th:case="'USD_TRN'" class="header-card">
+            <div class="card bg-crop">
+                <img src="../img/banner/used_trans_banner.jpg" class="card-img rounded mx-auto d-block bg-menu" alt="커뮤니티설명" style="top:-200px;left:0px;"/>
+                <div class="card-img-overlay">
+                    <h5 class="card-title text-dark text-center fs-1">
+                        고양이, 집사용품 중고거래!
+                    </h5>
+                    <p class="card-text text-dark text-center fs-3">
+                        고양이, 집사용품을 거래할 수 있는 커뮤니티입니다~
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div th:case="'NOTICE'" class="header-card">
+            <div class="card bg-crop">
+                <img src="../img/banner/notice_banner.jpg" class="card-img rounded mx-auto d-block bg-menu" alt="커뮤니티설명" style="top:-100px;left:0px;"/>
+                <div class="card-img-overlay">
+                    <h5 class="card-title text-dark text-center fs-1">
+                        공지사항
+                    </h5>
+                    <p class="card-text text-dark text-center fs-3">
+                        Meow, me you 공지사항입니다!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
     <form id="frm" th:action="@{/boardupdate/{postNo}(postNo=${board.postNo})}" method="post" enctype="multipart/form-data">
     <div id="insert_text_box">
       <div class="row w-50 mb-3">
         <label for="formTextContent" class="col-sm-2 col-form-label">제목 *</label>
         <div class="col-sm-10">
-
           <input
             type="text" name="subject"
             class="form-control"
@@ -144,6 +236,56 @@
           />
         </div>
       </div>
+      <!--이후 추가-->
+      <div class="row w-50 mb-5">
+
+        <div th:if="${board.communityId}=='USD_TRN' or ${board.communityId}=='FRE_SEL'">
+
+        <div th:switch="${board.communityId}">
+          <div th:case="'FRE_SEL'">
+              <input type="hidden" name="price" value="0">
+              <div class="col-sm-10 mb-3" style="display:flex; justify-content: center; align-items: center;">
+                  <label for="post_id_select_byFreeSell" class="col-sm-2 col-form-label">무료나눔품목 *</label>
+                  <select id= "post_id_select_byFreeSell" name="postId" th:value="${board.postId}" class="form-select" aria-label="post_type">
+                      <option th:selected="${board.postId}=='CTWR_FREE'" value="CTWR_FREE">캣타워</option>
+                      <option th:selected="${board.postId}=='FDST_FREE'" value="FDST_FREE">식사용품</option>
+                      <option th:selected="${board.postId}=='FOOD_FREE'" value="FOOD_FREE">소모품(식사류)</option>
+                      <option th:selected="${board.postId}=='HSW_FREE'" value="HSW_FREE">집사용품</option>
+                      <option th:selected="${board.postId}=='HYG_FREE'" value="HYG_FREE">위생용품</option>
+                  </select>
+              </div>
+          </div>
+          <div th:case="'USD_TRN'" >
+
+              <div class="mb-3" style="display:flex; justify-content: space-between; align-items: center;">
+
+                      <label for="post_id_select_byUsedTransfer" class="col-form-label col-sm-2">중고거래품목 *</label>
+                      <select id= "post_id_select_byUsedTransfer" name="postId" class="form-select" aria-label="post_type">
+                          <option th:selected="${board.postId}=='CTWR_SELL'" value="CTWR_SELL">캣타워</option>
+                          <option th:selected="${board.postId}=='FDST_SELL'" value="FDST_SELL">식사용품</option>
+                          <option th:selected="${board.postId}=='FOOD_SELL'" value="FOOD_SELL">소모품(식사류)</option>
+                          <option th:selected="${board.postId}=='HSW_SELL'" value="HSW_SELL">집사용품</option>
+                          <option th:selected="${board.postId}=='HYG_SELL'" value="HYG_SELL">위생용품</option>
+                          <option th:selected="${board.postId}=='WSH_SELL'" value="WSH_SELL">목욕용품</option>
+                      </select>
+
+
+
+                      <label for="second_amount" class="col-form-label col-sm-2">가격 *</label>
+                      <input type="text" class="form-control form_info" id="second_amount" name="price" th:value="${price}" onkeyup="inputNumberFormat(this);">
+
+              </div>
+          </div>
+        </div>
+
+        </div>
+
+        <div th:unless="${board.communityId}=='USD_TRN' or ${board.communityId}=='FRE_SEL'">
+          <input type="hidden" name="price" value="0">
+        </div>
+        
+      </div>
+      <!--이후 추가 끗-->
       <div class="row w-50 mb-5">
         <label for="exampleFormControlTextarea1" class="col-sm-2 col-form-label"
           >내용 *</label
@@ -192,7 +334,7 @@
         <button class="btn btn-dark" ><i class="bi bi-pencil-square"></i>수정하기</button>
 
         <button type="button" class="btn btn-dark" style="margin-left:10px;">
-          <a href="/boardlist" class="text-white"> <i class="bi bi-list"></i> 목록으로</a>
+          <a th:href="@{/boardlist(id=${board.communityId})}" class="text-white"> <i class="bi bi-list"></i> 목록으로</a>
         </button>
       </div>
     </form>

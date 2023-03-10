@@ -19,14 +19,15 @@ import javax.validation.constraints.Positive;
 @Table(name="SCND_HNDTR")
 public class SecondHandTrade {
 
-    @Column(name="USER_NO")
-    private Long userNo;
-
     @Id
     @Column(name="POST_NO")
     private Long postNo;
 
-    @Positive(message = "금액은 0원 이상이어야 합니다!")
     @Column(name="PRICE")
     private int price;
+
+    //230306 추가
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn( name="post_no" ,insertable = false, updatable = false)
+    private CommunityMaster communityMaster;
 }
