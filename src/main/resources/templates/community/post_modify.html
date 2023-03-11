@@ -226,7 +226,7 @@
 
     </div>
 
-    <form id="frm" th:action="@{/boardupdate/{postNo}(postNo=${board.postNo})}" method="post" enctype="multipart/form-data">
+    <form id="frm" th:action="@{/boardupdate(postNo=${board.postNo},id=${board.communityId})}" method="post" enctype="multipart/form-data">
     <div id="insert_text_box">
       <div class="row w-50 mb-3">
         <label for="formTextContent" class="col-sm-2 col-form-label">제목 *</label>

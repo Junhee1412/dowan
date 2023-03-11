@@ -402,7 +402,7 @@
 
 
     <div class="footer-btn-group" id="post_button_group">
-      <a type="button" class="btn btn-outline-primary" style="margin-right : 10px" th:if="${board.userNo == user.userNo}" th:href="@{/boardmodify/{postNo}(postNo=${board.postNo},id=${comid})}">
+      <a type="button" class="btn btn-outline-primary" style="margin-right : 10px" th:if="${board.userNo == user.userNo}" th:href="@{/boardmodify(postNo=${board.postNo},id=${comid})}">
 
         <i class="bi bi-pencil-square"></i> 수정하기
       </a>
