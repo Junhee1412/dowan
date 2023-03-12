@@ -14,12 +14,12 @@
     <meta property="og:image" content="http://meowmeyou.com/img/index/kakao_preview.jpg"/>
     <meta property="og:site_name" content="유기묘 커뮤니티에 오신걸 환영합니다!"/>
 
+    <title th:replace="${title}">제목</title>
+
     <!-- favicon-->
     <link rel="icon" th:href="@{img/favicon/favicon-remove-bg.ico}" type="image/x-icon" sizes="16x16"/>
     <!-- bootstrap icons -->
-    <link href="../css/bootstrap-icons.css" rel="stylesheet">
-
-    <title th:replace="${title}">제목</title>
+    <link rel="stylesheet" th:href="@{css/fragments/bootstrap-icons.css}">
     <!-- common used css files-->
     <link rel="stylesheet" th:href="@{css/fragments/header_nav.css}">
     <!-- bootstrap icons-->
