@@ -1,0 +1,111 @@
+.header-card {
+  margin-top: 80px;
+}
+
+.bi-heart {
+  font-size: 40px;
+  color: crimson;
+}
+
+#heart_box {
+  margin-left: auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.bi-heart-fill {
+  font-size: 40px;
+  color: crimson;
+}
+
+.bi:hover {
+  cursor: pointer;
+}
+
+.footer-btn-group button {
+  margin: 10px;
+}
+
+#carouselExampleIndicators {
+  margin-top: 50px;
+  width: 60%;
+  height: 60%;
+  display: block;
+  left: 20%;
+}
+
+.heart {
+  display: flex;
+  margin: 0px 21%;
+  position: relative;
+}
+
+.bi-heart,
+.bi-heart-fill {
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+#community_content {
+  position: relative;
+  margin: 50px 21%;
+}
+
+a {
+  text-decoration: none;
+}
+
+#reply_content {
+  width: 80%;
+  margin-right: auto;
+}
+
+#post_title {
+  position: relative;
+  margin: 50px 21%;
+}
+
+.sec-ma {
+  margin-top: -40px;
+ margin: 0 auto;
+}
+
+.card-title {
+  margin-top: 100px;
+}
+
+.card {
+width: 90%;
+margin: 0 auto;
+
+}
+
+.btn_mar{
+margin-top: -50px;
+width: 15%;
+height: 65px;
+margin-right: auto;
+}
+
+.marArea{
+display:inline-block;
+width: 65%;
+margin-top: 10px;
+margin-left: 7px;
+}
+
+.reply_auto{
+width:65%;
+margin:0 auto;
+font-family: "Noto Sans KR"
+}
+
+.com_auto{
+width:100%;
+margin: 0 auto;
+font-family: "Noto Sans KR"}
+
+li{
+list-style:none;
+}

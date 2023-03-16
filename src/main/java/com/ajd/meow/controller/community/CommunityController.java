@@ -45,6 +45,8 @@ public class CommunityController {
         model.addAttribute("user", loginUser);
         model.addAttribute("comid",id);
 
+        model.addAttribute("userType",loginUser.getUserType()); // ADD_USERTYPE
+
         return "community/post_insert";
     }
 
@@ -52,7 +54,6 @@ public class CommunityController {
     @PostMapping("/boardwritepro")
     public String boardWritePro(HttpSession session, Model model, CommunityMaster communityMaster, int price,
                                 @RequestParam("files") List<MultipartFile> files) throws Exception {
-        System.out.println("111111111111111111111111");
 
         UserMaster loginUser = (UserMaster) session.getAttribute("user");
         model.addAttribute("user", loginUser);
@@ -101,7 +102,7 @@ public String communityList(String id, @PageableDefault(page = 0, size = 12, sor
         model.addAttribute("totalPage", totalPage);
         model.addAttribute("maxPage", 10);
         model.addAttribute("comid",id );
-        model.addAttribute("member",loginUser.getUserType());// 230301 추가
+        model.addAttribute("userType",loginUser.getUserType());// 230301 추가 - 수정 -> ADD_USERTYPE
 
         return "community/post_list";
 
@@ -114,6 +115,8 @@ public String communityList(String id, @PageableDefault(page = 0, size = 12, sor
         model.addAttribute("user", loginUser);
         model.addAttribute("comid",id);
 
+        model.addAttribute("userType",loginUser.getUserType()); // ADD_USERTYPE
+
         List<CommunityImage> filess = communityImageRepository.findByPostNo(postNo);
 
         if (communityService.communityImgFindByPostNo(postNo) != null) {
@@ -125,10 +128,10 @@ public String communityList(String id, @PageableDefault(page = 0, size = 12, sor
         model.addAttribute("numberOfHeart",communityService.countNumberOfHeart(postNo));
 
         if(communityService.getInfoAboutClickLike(loginUser.getUserNo(), postNo)){
-            System.out.println("색칠하트");
+            //System.out.println("색칠하트");
             model.addAttribute("clickHeart",true);
         }else{
-            System.out.println("빈하트");
+            //System.out.println("빈하트");
             model.addAttribute("clickHeart",false);
         }
 
@@ -155,13 +158,16 @@ public String communityList(String id, @PageableDefault(page = 0, size = 12, sor
         return "community/community_message";
     }
 
-    @GetMapping("/boardmodify")
+    @GetMapping("/boardmodify{postNo}")
     public String boardModify(String id, Long postNo, HttpSession session, Model model,CommunityImage communityImage) {
         UserMaster loginUser = (UserMaster) session.getAttribute("user");
         model.addAttribute("user", loginUser);
 
         model.addAttribute("board", communityService.communityPostView(postNo));
         model.addAttribute("orgName", communityService.communityImgFindByPostNo(postNo));
+
+        model.addAttribute("userType",loginUser.getUserType()); // ADD_USERTYPE
+
         // 이후 추가
         if(communityService.communityPostView(postNo).getCommunityId().equals("USD_TRN")){
             model.addAttribute("price",secondHandTradeRepository.findById(postNo).get().getPrice());
@@ -170,7 +176,7 @@ public String communityList(String id, @PageableDefault(page = 0, size = 12, sor
             return "community/post_modify";
     }
 
-    @PostMapping("/boardupdate")
+    @PostMapping("/boardupdate{postNo}")
     public String communityPostModify(String id, Long postNo, HttpSession session, CommunityMaster communityMaster, int price, Model model, @RequestParam("files") List<MultipartFile> files,CommunityImage communityImage) throws Exception {
         UserMaster loginUser = (UserMaster) session.getAttribute("user");
 
@@ -195,7 +201,7 @@ public String communityList(String id, @PageableDefault(page = 0, size = 12, sor
 
         boardTemp.setSubject(communityMaster.getSubject());
         boardTemp.setContent(communityMaster.getContent());
-        // 이후 추가 // 추추가 (아래 if문 추가)
+        // 이후 추가
         if(boardTemp.getCommunityId().equals("USD_TRN") || boardTemp.getCommunityId().equals("FRE_SEL")){
             boardTemp.setPostId(communityMaster.getPostId());
         }
