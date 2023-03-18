@@ -1,11 +1,9 @@
 package com.ajd.meow.controller.community;
 
-import com.ajd.meow.entity.CommunityImage;
-import com.ajd.meow.entity.CommunityLike;
-import com.ajd.meow.entity.CommunityMaster;
-import com.ajd.meow.entity.UserMaster;
+import com.ajd.meow.entity.*;
 import com.ajd.meow.repository.community.CommunityImageRepository;
 import com.ajd.meow.repository.community.CommunityMasterRepository;
+import com.ajd.meow.repository.community.SecondHandTradeRepository;
 import com.ajd.meow.service.community.CommunityService;
 import com.ajd.meow.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +35,9 @@ public class CommunityController {
     @Autowired
     private UserService userService;
 
+    @Autowired // 230301 추가
+    private SecondHandTradeRepository secondHandTradeRepository;
+
 
     @GetMapping("/boardwrite") //localhost:8080/boardwrite 작성시 이동
     public String boardWriteForm(String id,HttpSession session, Model model) {
@@ -44,18 +45,20 @@ public class CommunityController {
         model.addAttribute("user", loginUser);
         model.addAttribute("comid",id);
 
+        model.addAttribute("userType",loginUser.getUserType()); // ADD_USERTYPE
+
         return "community/post_insert";
     }
 
 
     @PostMapping("/boardwritepro")
-    public String boardWritePro(HttpSession session, Model model, CommunityMaster communityMaster,
+    public String boardWritePro(HttpSession session, Model model, CommunityMaster communityMaster, int price,
                                 @RequestParam("files") List<MultipartFile> files) throws Exception {
 
         UserMaster loginUser = (UserMaster) session.getAttribute("user");
         model.addAttribute("user", loginUser);
 
-        communityService.write(communityMaster);
+        communityService.write(communityMaster, price);
 
         for (MultipartFile img : files) {
             communityMaster.setPostNo(communityMaster.getPostNo());
@@ -63,8 +66,8 @@ public class CommunityController {
 
             communityService.saveFile(img, session, model, communityMaster);
         }
-            model.addAttribute("message", "글 작성 완료.");
-            model.addAttribute("SearchUrl", "/boardlist?id="+communityMaster.getCommunityId());
+        model.addAttribute("message", "글 작성 완료.");
+        model.addAttribute("SearchUrl", "/boardlist?id="+communityMaster.getCommunityId());
 //        return "redirect:/boardlist";
         return "community/community_message";
     }
@@ -99,6 +102,7 @@ public String communityList(String id, @PageableDefault(page = 0, size = 12, sor
         model.addAttribute("totalPage", totalPage);
         model.addAttribute("maxPage", 10);
         model.addAttribute("comid",id );
+        model.addAttribute("userType",loginUser.getUserType());// 230301 추가 - 수정 -> ADD_USERTYPE
 
         return "community/post_list";
 
@@ -111,6 +115,8 @@ public String communityList(String id, @PageableDefault(page = 0, size = 12, sor
         model.addAttribute("user", loginUser);
         model.addAttribute("comid",id);
 
+        model.addAttribute("userType",loginUser.getUserType()); // ADD_USERTYPE
+
         List<CommunityImage> filess = communityImageRepository.findByPostNo(postNo);
 
         if (communityService.communityImgFindByPostNo(postNo) != null) {
@@ -122,11 +128,16 @@ public String communityList(String id, @PageableDefault(page = 0, size = 12, sor
         model.addAttribute("numberOfHeart",communityService.countNumberOfHeart(postNo));
 
         if(communityService.getInfoAboutClickLike(loginUser.getUserNo(), postNo)){
-            System.out.println("색칠하트");
+            //System.out.println("색칠하트");
             model.addAttribute("clickHeart",true);
         }else{
-            System.out.println("빈하트");
+            //System.out.println("빈하트");
             model.addAttribute("clickHeart",false);
+        }
+
+        // 230301 추가 - 가격 추가
+        if(communityService.communityPostView(postNo).getCommunityId().equals("USD_TRN")){
+            model.addAttribute("price",secondHandTradeRepository.findById(postNo).get().getPrice());
         }
         return "community/post_view";
     }
@@ -140,24 +151,33 @@ public String communityList(String id, @PageableDefault(page = 0, size = 12, sor
 
 
         communityService.communityPostDelete(postNo);
-        model.addAttribute("message", "글 삭제 완료.");
+
+        model.addAttribute("message", "글 작성 완료.");
         model.addAttribute("SearchUrl", "/boardlist?id="+comid);
 
         return "community/community_message";
     }
 
-    @GetMapping("/boardmodify/{postNo}")
-    public String boardModify(String id,@PathVariable("postNo") Long postNo, HttpSession session, Model model,CommunityImage communityImage) {
+    @GetMapping("/boardmodify{postNo}")
+    public String boardModify(String id, Long postNo, HttpSession session, Model model,CommunityImage communityImage) {
         UserMaster loginUser = (UserMaster) session.getAttribute("user");
         model.addAttribute("user", loginUser);
 
         model.addAttribute("board", communityService.communityPostView(postNo));
         model.addAttribute("orgName", communityService.communityImgFindByPostNo(postNo));
+
+        model.addAttribute("userType",loginUser.getUserType()); // ADD_USERTYPE
+
+        // 이후 추가
+        if(communityService.communityPostView(postNo).getCommunityId().equals("USD_TRN")){
+            model.addAttribute("price",secondHandTradeRepository.findById(postNo).get().getPrice());
+        }
+        // 이후 추가 끗
             return "community/post_modify";
     }
 
-    @PostMapping("/boardupdate/{postNo}")
-    public String communityPostModify(String id,@PathVariable("postNo") Long postNo, HttpSession session, CommunityMaster communityMaster, Model model, @RequestParam("files") List<MultipartFile> files,CommunityImage communityImage) throws Exception {
+    @PostMapping("/boardupdate{postNo}")
+    public String communityPostModify(String id, Long postNo, HttpSession session, CommunityMaster communityMaster, int price, Model model, @RequestParam("files") List<MultipartFile> files,CommunityImage communityImage) throws Exception {
         UserMaster loginUser = (UserMaster) session.getAttribute("user");
 
         model.addAttribute("user", loginUser);
@@ -181,6 +201,15 @@ public String communityList(String id, @PageableDefault(page = 0, size = 12, sor
 
         boardTemp.setSubject(communityMaster.getSubject());
         boardTemp.setContent(communityMaster.getContent());
+        // 이후 추가
+        if(boardTemp.getCommunityId().equals("USD_TRN") || boardTemp.getCommunityId().equals("FRE_SEL")){
+            boardTemp.setPostId(communityMaster.getPostId());
+        }
+        if(boardTemp.getCommunityId().equals("USD_TRN")){
+            secondHandTradeRepository.findById(postNo).get().setPrice(price);
+            secondHandTradeRepository.save(secondHandTradeRepository.findById(postNo).get());
+        }
+        // 이후 추가 끗
 
         communityService.communityPostModify(boardTemp);
 
@@ -194,14 +223,15 @@ public String communityList(String id, @PageableDefault(page = 0, size = 12, sor
 
     // 주희 추가
     @GetMapping("countHeart")
-    public String countHeart(HttpSession session, Long postNo, Model model, CommunityLike communityLike){
+    public String countHeart(HttpSession session, Long postNo, Model model){
         if(session.getAttribute("user")==null){
             return "rediect:/";
         }
         else{
             UserMaster loginUser=userService.getUserMaster((UserMaster)session.getAttribute("user"));
+
             communityService.countHeart(postNo, loginUser.getUserNo());
-            return "redirect:/boardview?postNo="+postNo;
+            return "redirect:/boardview?postNo="+postNo+"&id="+communityService.communityPostView(postNo).getCommunityId();
         }
     }
     // 주희 추가 끝

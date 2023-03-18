@@ -46,14 +46,22 @@ public class DonateController {
     private UserService userService;
 
     @GetMapping("/donatehome")
-    public String donatehome(){
-        return "donate/donate_home";
+    public String donatehome(Model model, HttpSession session){
+        // 이후 추가
+        if(session.getAttribute("user")==null){
+            return "redirect:/loginpage";
+        }else{
+            model.addAttribute("userType",userService.getUserMaster((UserMaster)session.getAttribute("user")).getUserType());
+            return "donate/donate_home";
+        }
     }
 
     @GetMapping("/donatesuccess")
     public String donateSuccess(HttpSession session, Model model){
         UserMaster loginUser=(UserMaster)session.getAttribute("user");
         model.addAttribute("user",loginUser);
+
+        model.addAttribute("userType",loginUser.getUserType()); // ADD_USERTYPE
 
         return "donate/donate_success";
     }
@@ -62,6 +70,9 @@ public class DonateController {
     public String donateCreateForm(HttpSession session, DonateMaster donateMaster, Model model){
         UserMaster loginUser=(UserMaster)session.getAttribute("user");
         model.addAttribute("user",loginUser);
+
+        model.addAttribute("userType",loginUser.getUserType()); // ADD_USERTYPE
+
         return "donate/donate_insert";
     }
 
@@ -129,6 +140,8 @@ public class DonateController {
         model.addAttribute("user",loginUser);
         model.addAttribute("list", donateservice.donateList());
 
+        model.addAttribute("userType",loginUser.getUserType());// ADD_USERTYPE
+
         Page<DonateMaster> lists = donateservice.donateList(pageable);
         int nowPage = lists.getPageable().getPageNumber()+1 ;
         int startPage = Math.max(0 , 1);
@@ -188,6 +201,8 @@ public class DonateController {
     public String donateReceipt(HttpSession session, Model model, Long id){
         UserMaster loginUser=(UserMaster)session.getAttribute("user");
         model.addAttribute("user",loginUser);
+
+        model.addAttribute("userType",loginUser.getUserType());// ADD_USERTYPE
 
         model.addAttribute("donateReceipt", donateservice.donateReceipt(id));
         return "donate/donate_receipt";

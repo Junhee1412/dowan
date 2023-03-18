@@ -1,14 +1,13 @@
 package com.ajd.meow.service.community;
 
 
-import com.ajd.meow.entity.CommunityImage;
-import com.ajd.meow.entity.CommunityLike;
-import com.ajd.meow.entity.CommunityMaster;
-import com.ajd.meow.entity.UserMaster;
+import com.ajd.meow.entity.*;
 import com.ajd.meow.repository.community.CommunityImageRepository;
 import com.ajd.meow.repository.community.CommunityLikeRepository;
 import com.ajd.meow.repository.community.CommunityMasterRepository;
+import com.ajd.meow.repository.community.SecondHandTradeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,15 +34,27 @@ public class CommunityServiceImpl implements CommunityService{
     @Autowired
     private CommunityImageRepository communityImageRepository;
 
+    @Bean
+    private SecondHandTrade getSecondHandTrade(){
+        return new SecondHandTrade();
+    }
 
     //글 작성
-    public void write(CommunityMaster communityMaster){
+    @Autowired
+    private SecondHandTradeRepository secondHandTradeRepository;
+
+    public void write(CommunityMaster communityMaster, int price){
 
         communityMaster.setCommunityId(communityMaster.getCommunityId());
-        communityMaster.setPostId("ADT_ING");
         communityMaster.setCreatePostDate(LocalDateTime.now());
-
         communityMasterRepository.save(communityMaster);
+
+        if(communityMaster.getCommunityId().equals("USD_TRN")){
+            SecondHandTrade secondHandTrade=getSecondHandTrade();
+            secondHandTrade.setPostNo(communityMaster.getPostNo());
+            secondHandTrade.setPrice(price);
+            secondHandTradeRepository.save(secondHandTrade);
+        }
     }
 
     //파일 업로드
@@ -187,6 +198,7 @@ public class CommunityServiceImpl implements CommunityService{
     public Page<CommunityMaster> searchBySubjectAndUser(String searchKeyword, Long userNo, Pageable pageable){
         return communityMasterRepository.findBySubjectContainingAndUserNo(searchKeyword,userNo,pageable);
     }
+
 
 
 

@@ -9,26 +9,23 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <meta property="og:type" content="website" />
-    <meta
-      property="og:url"
-      content="http://mintable1.cafe24.com/Meow_me_you_front/html/"
-    />
+    <meta property="og:url" content="http://meowmeyou.com/"/>
     <meta property="og:title" content="미유미유" />
     <meta property="og:description" content="너와 나의 이야기가 펼쳐지는 곳" />
    <link href="/css/bootstrap-icons.css" rel="stylesheet">
     <meta
       property="og:image"
-      content="http://mintable1.cafe24.com/Meow_me_you_front/img/kakao_preview.jpg"
+      content="http://meowmeyou.com/img/index/kakao_preview.jpg"
     />
     <meta
       property="og:site_name"
       content="유기묘 커뮤니티에 오신걸 환영합니다!"
     />
-    
+
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
-  
+
     <link
       rel="icon"
       href="../img/favicon/favicon-remove-bg.ico"
@@ -37,10 +34,10 @@
     />
     <title>관리자페이지</title>
     <!-- Font Awesome icons (free version)-->
-    <script
-      src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"
-      crossorigin="anonymous"
-    ></script>
+<!--    <script-->
+<!--      src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"-->
+<!--      crossorigin="anonymous"-->
+<!--    ></script>-->
     <!-- Simple line icons-->
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
@@ -60,17 +57,38 @@
     <!-- Navigation-->
     <header id="header" class="header d-flex align-items-center fixed-top">
       <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
-  
-       
+
+
           <!-- Uncomment the line below if you also wish to use an image logo -->
           <!-- <img src="assets/img/logo.png" alt=""> -->
           <a class="logo d-flex align-items-center" href="/"><img alt="Brand" src="../img/logo/logo_remove_bg.png"></a>
         </a>
-  
+
         <i class="mobile-nav-toggle mobile-nav-show bi bi-list "></i>
         <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x "></i>
         <nav id="navbar" class="navbar">
           <ul>
+            <li class="dropdown"><a href="/"><span>Meow me, you</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+              <ul>
+                <li><a href="business">사업소개</a></li>
+                <!--<li><a th:href="@{/boardlist?(id=ADP_REV)}">후원내역</a></li>-->
+              </ul>
+            </li>
+            <li><a href="donatehome">후원하기</a></li>
+            <li class="dropdown"><a href="#"><span>물품거래</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+              <ul>
+                <li><a th:href="@{/boardlist?(id=FRE_SEL)}">무료 나눔</a></li>
+                <li><a th:href="@{/boardlist?(id=USD_TRN)}">중고 거래</a></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="#"><span>커뮤니티</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+              <ul>
+                <li><a th:href="@{/boardlist?(id=NOTICE)}">공지사항</a></li>
+                <li><a th:href="@{/boardlist?(id=ADP_ACT)}">분양하기</a></li>
+                <li><a th:href="@{/boardlist?(id=ADP_REV)}">분양후기</a></li>
+                <li><a th:href="@{/boardlist?(id=CAT_STR)}">캣스타그램</a></li>
+              </ul>
+            </li>
             <li class="dropdown"><a href="adminMypage"><span>관리자마이페이지</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
               <ul>
                 <li><a href="adminMypage">관리자마이페이지</a></li>
@@ -84,7 +102,7 @@
           </ul>
         </nav>
         <!-- .navbar -->
-  
+
       </div>
     </header><!-- End Header -->
 
@@ -107,17 +125,17 @@
         </div>
       </div>
     </div>
- 
+
 
    <section>
-    
+
     <div class="list-group list_user">
       <span class="fw-bold fs-5 text-dark mb-3 mt-3" disabled>회원관리</span>
       <a href="adminUserList" class="list-group-item list-group-item-action">회원 목록</a>
       <a href="adminPostManage" class="list-group-item list-group-item-action">게시글 관리</a>
       <a href="adminDonatemanage" class="list-group-item list-group-item-action">후원관리하기</a>
-      
-      
+
+
 
 
               <!--  어드민 등록 Modal -->
@@ -128,7 +146,7 @@
                 <h4 class="modal-title" id="myModalLabel">ADMIN 생성</h4>
               </div>
               <div class="modal-body">
-                
+
                 <form action="adminCreate" method="post" onsubmit="return ValidChecked();" enctype="multipart/form-data">
 
 
@@ -190,16 +208,15 @@
         <a href="javascript:openDetail('/chat?id=master')" data-toggle="tooltip" data-placement="top" id="chat_btn" title="Chat" class="list-group-item list-group-item-action enter_chat">관리자 채팅</a>
         <!--<a href="createdonateBS.meow" class="list-group-item list-group-item-action">후원 사업게시</a>
         <a href="deletedonateBS.meow" class="list-group-item list-group-item-action">후원 사업삭제</a>--><!--비즈니스마스터-->
-        <a href="adminInsertNotice" class="list-group-item list-group-item-action">공지 글 작성</a>
-          <a href="#" class="list-group-item list-group-item-action" data-toggle="modal" data-target="#myModal">관리자생성하기</a>&nbsp;&nbsp;&nbsp;
+        <a href="#" class="list-group-item list-group-item-action" data-toggle="modal" data-target="#myModal">관리자생성하기</a>&nbsp;&nbsp;&nbsp;
       </div>
 
-      
+
     </section>
   <!-- section - end -->
 
-   
-   
+
+
 
     <!-- Footer-->
     <footer class="py-5 bg-dark">
@@ -220,6 +237,6 @@
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
      <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
      <!-- Core JS-->
-     <script src="js/scripts.js"></script>
+
   </body>
 </html>

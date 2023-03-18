@@ -23,8 +23,6 @@ class ReplyRepositoryTest {
     @Autowired
     CommunityMasterRepository communityMasterRepository;
 
-    @Autowired
-    UserMasterRepository userMasterRepository;
 
     @Test
     public void read() {

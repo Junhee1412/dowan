@@ -11,14 +11,14 @@
   <meta property="og:type" content="website" />
   <meta
           property="og:url"
-          content="http://mintable1.cafe24.com/Meow_me_you_front/html/"
+          content="http://meowmeyou.com/"
   />
   <meta property="og:title" content="미유미유" />
   <meta property="og:description" content="너와 나의 이야기가 펼쳐지는 곳" />
   <link href="../css/bootstrap-icons.css" rel="stylesheet">
   <meta
           property="og:image"
-          content="http://mintable1.cafe24.com/Meow_me_you_front/img/kakao_preview.jpg"
+          content="http://meowmeyou.com/img/index/kakao_preview.jpg"
   />
   <meta
           property="og:site_name"
@@ -42,10 +42,10 @@
   />
   <title>내 글 목록 보기</title>
   <!-- Font Awesome icons (free version)-->
-  <script
-          src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"
-          crossorigin="anonymous"
-  ></script>
+<!--  <script-->
+<!--          src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"-->
+<!--          crossorigin="anonymous"-->
+<!--  ></script>-->
   <!-- Simple line icons-->
   <link
           href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"
@@ -93,7 +93,7 @@
         </li>
         <li class="dropdown"><a href="#"><span>커뮤니티</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
           <ul>
-           <!--                <li><a th:href="@{/boardlist?(id=NOTICE)}">공지사항</a></li>-->
+            <li><a th:href="@{/boardlist?(id=NOTICE)}">공지사항</a></li>
             <li><a th:href="@{/boardlist?(id=ADP_ACT)}">분양하기</a></li>
             <li><a th:href="@{/boardlist?(id=ADP_REV)}">분양후기</a></li>
             <li><a th:href="@{/boardlist?(id=CAT_STR)}">캣스타그램</a></li>
@@ -140,11 +140,11 @@
       <tr>
         <th scope="col">커뮤니티</th>
         <th scope="col">글제목</th>
-        <th scope="col">조회 수</th>
+        <th class="text-center" scope="col">조회 수</th>
         <!--<th scope="col">댓글 수</th>
         <th scope="col">좋아요 수</th>-->
-        <th scope="col">작성자</th>
-        <th scope="col">작성일자</th>
+        <th class="text-center" scope="col">작성자</th>
+        <th class="text-center" scope="col">작성일자</th>
 
       </tr>
       </thead>
@@ -160,11 +160,11 @@
           <span th:case="'NOTICE'">공지사항</span>
         </td>
         <td><a style="text-decoration: none;" th:href="@{/boardview?(postNo=${likeList.postNo})}"><span th:text="${likeList.getCommunityMaster().getSubject()}"></span></a></td>
-        <td th:text="${likeList.getCommunityMaster().getViewCount()}">조회수</td>
-        <td th:text="${likeList.getCommunityMaster().getUserMaster().getNickName()}">닉네임</td>
+        <td class="text-center" th:text="${likeList.getCommunityMaster().getViewCount()}">조회수</td>
+        <td class="text-center" th:text="${likeList.getCommunityMaster().getUserMaster().getNickName()}">닉네임</td>
         <!--<td th:text="${postMaster.getViewCount()}">댓글수</td>
         <td th:text="${postMaster.getViewCount()}">좋아요수</td>-->
-        <td th:text="${likeList.getCommunityMaster().getCreatePostDate().toString().replace('T','  ')}">작성일</td>
+        <td class="text-center" th:text="${likeList.getCommunityMaster().getCreatePostDate().toString().replace('T','  ')}">작성일</td>
         <!--<td><a th:href="@{/boarddelete?(postNo=${postMaster.postNo})}" type="button" class="btn btn-outline-danger confirm_deletePost_btn">삭제</a></td>-->
       </tr>
       </tbody>
