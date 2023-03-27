@@ -30,7 +30,7 @@ public class ReplyApiController {
     public void delete(@PathVariable Long replyNo) {
         System.out.println(replyNo);
 
-        replyService.replyDelete(replyNo);
+         replyService.replyDelete(replyNo);
 
     }
 }
