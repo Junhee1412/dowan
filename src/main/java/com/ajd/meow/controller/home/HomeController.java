@@ -15,27 +15,34 @@ public class HomeController {
     private UserService userService;
 
     @GetMapping("/")
-    public String home(HttpSession session){
-        if(session.getAttribute("user")==null){
-            return "index";
-        }else{
-            UserMaster loginUser= (UserMaster)session.getAttribute("user");
-            if(loginUser.getUserType().equals("ADMIN")){
-                return "admin/admin_index";// 어드민 페이지로 이동
-            }else{
-                return "user/index_login";
-            }
+    public String home(HttpSession session,Model model) {
+        if (session.getAttribute("user") == null) {
+            model.addAttribute("userType", "noUser");
+        } else {
+            UserMaster loginUser = userService.getUserMaster((UserMaster) session.getAttribute("user"));
+            //if(loginUser.getUserType().equals("ADMIN")){return "admin/admin_index";}else{return "user/index_login";}}
+            model.addAttribute("userType", loginUser.getUserType());
         }
+        return "index";
     }
 
     @GetMapping("/business") // 이후 추가
     public String business(HttpSession session, Model model){
-        model.addAttribute("userType",userService.getUserMaster((UserMaster)session.getAttribute("user")).getUserType());
+        if(session.getAttribute("user")==null){
+            model.addAttribute("userType","noUser");
+        }else{
+            model.addAttribute("userType",userService.getUserMaster((UserMaster)session.getAttribute("user")).getUserType());
+        }
         return "business/business_info";
     }
 
     @GetMapping("/test")
-    public  String test(){
-        return "fragments/testfile";
+    public String test(){
+        return "user/user_likes_list";
+    }
+
+    @GetMapping("/testa")
+    public String testA(){
+        return "user/user_likes_list_test";
     }
 }

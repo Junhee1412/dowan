@@ -25,7 +25,7 @@
     <div class="card bg-crop">
       <img src="../img/banner/donate_banner.jpg" class="card-img rounded mx-auto d-block bg-menu" alt="커뮤니티설명" />
       <div class="card-img-overlay" id="community_type">
-        <h5 class="card-title text-dark text-center fs-1">
+        <h5 class="card-title text-dark text-center fs-2">
           내 후원목록 모아보기
         </h5>
         <p class="card-text text-dark text-center fs-3">
@@ -52,7 +52,7 @@
         </thead>
         <tbody>
         <tr th:if="${user.getUserNo()}==${donateList.getUserNo()}" th:each="donateList:${list}">
-          <td th:text="${donateList.donateName}"></td>
+          <td class="text-start" th:text="${donateList.donateName}"></td>
           <td th:text="${donateList.donateType}"></td>
           <td class="text-end" style="padding-right:100px;" th:text="${#numbers.formatInteger(donateList.donateAmount, 0, 'COMMA')+'원'}"></td>
           <td th:switch="${donateList.donateWayCode}">
