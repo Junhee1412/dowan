@@ -35,4 +35,14 @@ public class HomeController {
         }
         return "business/business_info";
     }
+
+    @GetMapping("/test")
+    public String test(){
+        return "user/user_likes_list";
+    }
+
+    @GetMapping("/testa")
+    public String testA(){
+        return "user/user_likes_list_test";
+    }
 }
